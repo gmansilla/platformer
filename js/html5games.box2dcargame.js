@@ -12,14 +12,19 @@ $(function() {
         switch(e.keyCode) {
             case 65: // left - a
                 var impulse = new b2Vec2(-57000, 0);
-                carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
+                //carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
+                carGame.person.SetLinearVelocity(new b2Vec2(-570,0));
                 break;
-                break;
+
             case 68: // right - d
                 var impulse = new b2Vec2(57000, 0);
-                carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
+                //carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
+                carGame.person.SetLinearVelocity(new b2Vec2(570,0));
                 break;
-            case 38: //upd
+
+            case 87: //upd
+
+                carGame.person.SetLinearVelocity(new b2Vec2(0, -570));
                 break;
         }
     });
