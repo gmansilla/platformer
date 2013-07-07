@@ -1,36 +1,54 @@
 var carGame = {
+
 }
 var canvas;
 var ctx;
 var canvasWidth;
 var canvasHeight;
 
+LEFT = 65;
+RIGHT = 68;
+JUMP = 87;
 
 
 $(function() {
     $(document).keydown(function(e) {
+
         switch(e.keyCode) {
-            case 65: // left - a
+            case LEFT: // left - a
                 var impulse = new b2Vec2(-57000, 0);
                 //carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
                 carGame.person.SetLinearVelocity(new b2Vec2(-570,0));
+                carGame.person.lastMove = LEFT;
                 break;
 
-            case 68: // right - d
+            case RIGHT: // right - d
                 var impulse = new b2Vec2(57000, 0);
                 //carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
                 carGame.person.SetLinearVelocity(new b2Vec2(570,0));
+                carGame.person.lastMove = RIGHT;
                 break;
 
-            case 87: //upd
+            case JUMP: //up - w
+                //console.log('down ' + carGame.person.isJumping);
+                if (!isOnAir() && carGame.person.isJumping == false || carGame.person.isJumping == undefined) {
+                    var impulse = new b2Vec2(0, -57000);
+                    carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
+                    //carGame.person.SetLinearVelocity(new b2Vec2(0, -570));
+                    carGame.person.isJumping = true;
+                    //console.log(carGame.person.GetLinearVelocity());
+                }
 
-                carGame.person.SetLinearVelocity(new b2Vec2(0, -570));
                 break;
         }
     });
 
     $(document).keyup(function(e) {
 
+
+        console.log(isOnAir());
+        //console.log('up ' + carGame.person.isJumping);
+        carGame.person.isJumping = false;
         carGame.person.SetLinearVelocity(new b2Vec2(0,0));
         carGame.person.SetAngularVelocity(0);
     });
@@ -67,6 +85,7 @@ function createPersonAt(x, y) {
     var boxBd = new b2BodyDef();
     boxBd.AddShape(boxSd);
     boxBd.position.Set(x, y);
+    boxBd.preventRotation = true;
 
     return carGame.world.CreateBody(boxBd);
 }
@@ -157,4 +176,18 @@ function step() {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     drawWorld(carGame.world, ctx);
     setTimeout(step, 10);
+
 }
+
+function isOnAir() {
+    for (var cn = carGame.world.GetContactList(); cn != null; cn = cn.GetNext()) {
+        var body1 = cn.GetShape1().GetBody();
+        var body2 = cn.GetShape2().GetBody();
+        if (body1 == carGame.person || body2 == carGame.person) {
+            return false;
+        }
+
+    }
+    return true;
+}
+
