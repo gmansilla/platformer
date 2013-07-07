@@ -30,6 +30,19 @@ myGame.levels[0] = [
     { "type": "platform", "width": 90, "height": 10, "x": 750, "y": 600, "rotation": 0, "friction": 0 }
 ];
 
+myGame.levels[1] = [
+    { "type": "person", "x": 750, "y": 500 },
+    { "type": "win", "width": 20, "height": 30, "x": 100, "y": 210, "rotation": 0, "friction": 0},
+    { "type": "platform", "width": 80, "height": 10, "x": 100, "y": 250, "rotation": 0, "friction": 0},
+    { "type": "platform", "width": 80, "height": 10, "x": 350, "y": 300, "rotation": -20, "friction": 0.1 },
+    { "type": "platform", "width": 50, "height": 10, "x": 530, "y": 350, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 80, "height": 10, "x": 760, "y": 300, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 80, "height": 10, "x": 720, "y": 410, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 99, "height": 10, "x": 980, "y": 500, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 100, "height": 10, "x": 600, "y": 520, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 90, "height": 10, "x": 750, "y": 600, "rotation": -10, "friction": 0 }
+];
+
 
 $(function() {
     $(document).keydown(function(e) {
@@ -57,7 +70,6 @@ $(function() {
     });
 
     $(document).keyup(function(e) {
-
         myGame.person.lastReleasedKey = e.keyCode;
         myGame.person.SetLinearVelocity(new b2Vec2(0, 500));
         myGame.person.SetAngularVelocity(0);
@@ -218,7 +230,7 @@ function step() {
             }
         } else if ((body1 == myGame.person && body2 == myGame.win) ||
             (body1 == myGame.win && body2 == myGame.person)) {
-                //myGame.currentLevel++;
+                myGame.currentLevel++;
                 alert("Win!");
                 restartGame(myGame.currentLevel);
         }
@@ -251,18 +263,30 @@ function movePerson(direction, isFlying) {
 function isOnAir() {
     var x = Math.abs(myGame.person.GetLinearVelocity().x);
     var y = myGame.person.GetLinearVelocity().y;
-    //console.log("/////");
-    //console.log("X: " + x + " Y: " + y);
+    var list = myGame.world.GetContactList();
+
+    if (list == null) {
+        //console.log("on air");
+        return true;
+    } else {
+        //console.log("      touching ground");
+        return false;
+    }
+    console.log("X: " + x + " Y: " + y);
     //return !(x == 0 && y == 0 || (x == MyGame.STEP_DISTANCE / 100));
     if (myGame.person.currentStepDistance === undefined) {
         myGame.person.currentStepDistance = myGame.STEP_DISTANCE;
     }
     //console.log("step " + myGame.person.currentStepDistance);
     //console.log("/////");
-    if (x == 0 && y == 0 || (x == myGame.person.currentStepDistance / 100 && y == 0)) {
+    if (x == 0 && y == 0 ||
+        (x == myGame.person.currentStepDistance / 100 && y == 0) ||
+        (list !== null)
+        ) {
         return false;
     } //else if () {
-        return true;
+    console.log("on air");
+    return true;
     //}
 }
 
