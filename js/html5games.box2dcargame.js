@@ -9,8 +9,8 @@ var canvasHeight;
 LEFT = 65;
 RIGHT = 68;
 JUMP = 87;
-STEP_DISTANCE = 28000;
-STEP_DISTANCE_ON_AIR = 46000;
+STEP_DISTANCE = 18000;
+STEP_DISTANCE_ON_AIR = 36000;
 JUMP_ALTITUDE = 100000;
 
 $(function() {
@@ -30,7 +30,7 @@ $(function() {
                 if (!isFlying) {
                     goDown(JUMP_ALTITUDE * -1); //negative, so we JUMP
                 } else {
-                    goDown(100000);
+                    goDown(10000);
                 }
                 break;
         }
@@ -47,7 +47,7 @@ $(function() {
     // create the world
     carGame.world = createWorld();
     // create the ground
-    createGround(100, 10, 100, 100); //goal
+    createGround(100, 10, 100, 250); //goal
     createGround(80, 10, 400, 120); //2
     createGround(100, 10, 500, 200); //3
     createGround(80, 10, 760, 280); //4
