@@ -47,13 +47,26 @@ $(function() {
     // create the world
     carGame.world = createWorld();
     // create the ground
-    createGround(100, 10, 650, 470);
-    createGround(250, 10, 250, 370);
-    createGround(800, 25, 550, 772);//base - lava
+    createGround(100, 10, 100, 100); //goal
+    createGround(80, 10, 400, 120); //2
+    createGround(100, 10, 500, 200); //3
+    createGround(80, 10, 760, 280); //4
+    createGround(80, 10, 700, 400); //5
+    createGround(99, 10, 980, 500); //
+
+    createGround(100, 10, 600, 520); //
+
+    createGround(90, 10, 750, 600); //8
 
 
-    //carGame.person = createPersonAt(50, 210);
-    carGame.person = createPersonAt(350, 1010);
+
+    //createGround(width, height, positionX, positionY) {
+
+
+
+    createGround(800, 25, 550, 670);//base - lava
+    carGame.person = createPersonAt(750, 500);
+    //carGame.person = createPersonAt(350, 1010);
 
 
 
