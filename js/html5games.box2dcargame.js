@@ -9,8 +9,10 @@ var canvasHeight;
 LEFT = 65;
 RIGHT = 68;
 JUMP = 87;
-STEP_DISTANCE = 57000;
+STEP_DISTANCE = 28000;
+STEP_DISTANCE_ON_AIR = 46000;
 JUMP_ALTITUDE = 100000;
+
 $(function() {
     $(document).keydown(function(e) {
         //console.log(carGame.person.GetAngularVelocity());
@@ -28,24 +30,29 @@ $(function() {
                 break;
 
             case RIGHT: // right - d
-                if (isOnAir() && carGame.person.lastReleasedKey == RIGHT && carGame.person.lastPressedKey == RIGHT) {
+
+                var isFlying = isOnAir();
+
+                carGame.person.currentStepDistance = (isFlying? STEP_DISTANCE_ON_AIR : STEP_DISTANCE);
+
+                if (isFlying && carGame.person.lastReleasedKey == RIGHT && carGame.person.lastPressedKey == RIGHT) {
                     break;
                 }
-                if (isOnAir()) {
 
-                } else {
-
-                }
-                var impulse = new b2Vec2(STEP_DISTANCE, 0);
+                var impulse = new b2Vec2(carGame.person.currentStepDistance, 0);
                 //carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
-                carGame.person.SetLinearVelocity(new b2Vec2(STEP_DISTANCE / 100,0));
+                carGame.person.SetLinearVelocity(new b2Vec2(carGame.person.currentStepDistance / 100,0));
                 carGame.person.lastPressedKey = RIGHT;
                 break;
 
             case JUMP: //up - w
                 carGame.person.lastPressedKey = JUMP;
+                console.log("jumping");
                 if (!isOnAir()) {
                     goDown(JUMP_ALTITUDE * -1);
+                } else {
+                    console.log("preventing");
+
                 }
                 break;
         }
@@ -188,16 +195,19 @@ function step() {
 }
 
 function isOnAir() {
-    for (var cn = carGame.world.GetContactList(); cn != null; cn = cn.GetNext()) {
-        var body1 = cn.GetShape1().GetBody();
-        var body2 = cn.GetShape2().GetBody();
-
-        if (body1 == carGame.person || body2 == carGame.person) {
-            return false;
-        }
-
+    var x = carGame.person.GetLinearVelocity().x;
+    var y = carGame.person.GetLinearVelocity().y;
+    //console.log("X: " + x + " Y: " + y);
+    //return !(x == 0 && y == 0 || (x == STEP_DISTANCE / 100));
+    if (carGame.person.currentStepDistance === undefined) {
+        carGame.person.currentStepDistance = STEP_DISTANCE;
     }
-    return true;
+    
+    if (x == 0 && y == 0 || (x == carGame.person.currentStepDistance / 100 && y == 0)) {
+        return false;
+    } //else if () {
+        return true;
+    //}
 }
 
 function goDown(magnitude) {
@@ -207,4 +217,5 @@ function goDown(magnitude) {
     //carGame.person.SetLinearVelocity(new b2Vec2(0, -570));
     carGame.person.isJumping = true;
     //console.log(carGame.person.GetLinearVelocity());
+    return;
 }
