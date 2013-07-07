@@ -16,35 +16,30 @@ $(function() {
 
         switch(e.keyCode) {
             case LEFT: // left - a
-                carGame.person.lastPressedKey = LEFT;
+                if (isOnAir() && carGame.person.lastReleasedKey == LEFT && carGame.person.lastPressedKey == LEFT) {
+                    break;
+                }
                 var impulse = new b2Vec2(-57000, 0);
                 //carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
                 carGame.person.SetLinearVelocity(new b2Vec2(-570,0));
-
+                carGame.person.lastPressedKey = LEFT;
                 break;
 
             case RIGHT: // right - d
                 if (isOnAir() && carGame.person.lastReleasedKey == RIGHT && carGame.person.lastPressedKey == RIGHT) {
-                    console.log("preventing");
-                    return;
+                    break;
                 }
                 var impulse = new b2Vec2(57000, 0);
                 //carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
                 carGame.person.SetLinearVelocity(new b2Vec2(570,0));
                 carGame.person.lastPressedKey = RIGHT;
-
-
-
-
                 break;
 
             case JUMP: //up - w
                 carGame.person.lastPressedKey = JUMP;
-                //console.log('down ' + carGame.person.isJumping);
-                if (!isOnAir() && carGame.person.isJumping == false || carGame.person.isJumping == undefined) {
+                if (!isOnAir()) {
                     goDown(-57000);
                 }
-
                 break;
         }
 
