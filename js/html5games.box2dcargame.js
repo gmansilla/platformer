@@ -47,11 +47,13 @@ $(function() {
     // create the world
     carGame.world = createWorld();
     // create the ground
-    createGround(100, 25, 650, 470);
-    createGround(250, 25, 250, 370);
+    createGround(100, 10, 650, 470);
+    createGround(250, 10, 250, 370);
+    createGround(800, 25, 550, 772);//base - lava
 
 
-    carGame.person = createPersonAt(50, 210);
+    //carGame.person = createPersonAt(50, 210);
+    carGame.person = createPersonAt(350, 1010);
 
 
 

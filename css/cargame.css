@@ -9,7 +9,7 @@ em {
 }
 
 .startscreen {
-	background: #eee url(../images/starting_screen.jpg);
+	/*background: #eee url(../images/starting_screen.jpg);*/
 }
 
 .gamebg_level0 {
@@ -64,15 +64,16 @@ em {
 	width: 300px;
 	height:20px;
 	margin: 2px;
-	border: 1px solid #000;
+	/*border: 1px solid #000;*/
 	
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#8C906F), color-stop(48%,#8C906F), color-stop(51%,#323721), color-stop(54%,#55624F), color-stop(100%,#55624F)); /* webkit */
-	background: gradient(linear, left top, left bottom, color-stop(0%,#8C906F), color-stop(48%,#8C906F), color-stop(51%,#323721), color-stop(54%,#55624F), color-stop(100%,#55624F)); 
+	/*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#8C906F), color-stop(48%,#8C906F), color-stop(51%,#323721), color-stop(54%,#55624F), color-stop(100%,#55624F)); /* webkit */
+	/*background: gradient(linear, left top, left bottom, color-stop(0%,#8C906F), color-stop(48%,#8C906F), color-stop(51%,#323721), color-stop(54%,#55624F), color-stop(100%,#55624F)); */
 }
 
 .progressbar .fuel-value {
-	height:20px;
-	
+	height:50px;
+    background-color: pink;
+	/*
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#A8D751), color-stop(48%,#A8D751), color-stop(51%,#275606), color-stop(54%,#4A8A49), color-stop(100%,#4A8A49)); /* webkit */
-	background: gradient(linear, left top, left bottom, color-stop(0%,#A8D751), color-stop(48%,#A8D751), color-stop(51%,#275606), color-stop(54%,#4A8A49), color-stop(100%,#4A8A49));
+	/*background: gradient(linear, left top, left bottom, color-stop(0%,#A8D751), color-stop(48%,#A8D751), color-stop(51%,#275606), color-stop(54%,#4A8A49), color-stop(100%,#4A8A49));*/
 }
