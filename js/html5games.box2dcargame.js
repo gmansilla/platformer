@@ -2,6 +2,7 @@ var myGame = {
     STEP_DISTANCE: 18000,
     STEP_DISTANCE_ON_AIR: 25000,
     JUMP_ALTITUDE: 150000,
+    LIVES: 3,
     currentLevel: 0,
     lives: 3,
     time: 20000,
@@ -209,6 +210,8 @@ function step() {
             myGame.lives--;
             if (myGame.lives < 0) {
                 alert("game over");
+                myGame.lives = myGame.LIVES;
+                myGame.currentLevel = 0;
             } else {
                 alert("you failed! lets try again");
                 restartGame(myGame.currentLevel);
