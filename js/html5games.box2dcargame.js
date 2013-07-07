@@ -15,45 +15,22 @@ JUMP_ALTITUDE = 100000;
 
 $(function() {
     $(document).keydown(function(e) {
-        //console.log(carGame.person.GetAngularVelocity());
-
-
+        var isFlying = isOnAir();
         switch(e.keyCode) {
             case LEFT: // left - a
-                if (isOnAir() && carGame.person.lastReleasedKey == LEFT && carGame.person.lastPressedKey == LEFT) {
-                    break;
-                }
-                var impulse = new b2Vec2(STEP_DISTANCE * -1, 0);
-                //carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
-                carGame.person.SetLinearVelocity(new b2Vec2( -1 * STEP_DISTANCE / 100 ,0));
-                carGame.person.lastPressedKey = LEFT;
+                movePerson(LEFT, isFlying);
                 break;
 
             case RIGHT: // right - d
-
-                var isFlying = isOnAir();
-
-                carGame.person.currentStepDistance = (isFlying? STEP_DISTANCE_ON_AIR : STEP_DISTANCE);
-
-                if (isFlying && carGame.person.lastReleasedKey == RIGHT && carGame.person.lastPressedKey == RIGHT) {
-                    break;
-                }
-
-                var impulse = new b2Vec2(carGame.person.currentStepDistance, 0);
-                //carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
-                carGame.person.SetLinearVelocity(new b2Vec2(carGame.person.currentStepDistance / 100,0));
-                carGame.person.lastPressedKey = RIGHT;
+                movePerson(RIGHT, isFlying);
                 break;
 
             case JUMP: //up - w
                 carGame.person.lastPressedKey = JUMP;
-                console.log("jumping");
-                if (!isOnAir()) {
+                if (!isFlying) {
                     goDown(JUMP_ALTITUDE * -1); //negative, so we JUMP
                 } else {
                     goDown(100000);
-                    console.log("preventing");
-
                 }
                 break;
         }
@@ -193,6 +170,20 @@ function step() {
     drawWorld(carGame.world, ctx);
     setTimeout(step, 10);
 
+}
+
+function movePerson(direction, isFlying) {
+    carGame.person.currentStepDistance = (isFlying? STEP_DISTANCE_ON_AIR : STEP_DISTANCE);
+    if (isFlying && carGame.person.lastReleasedKey == direction && carGame.person.lastPressedKey == direction) {
+        return;
+    }
+    if (direction == RIGHT) {
+        var vector = new b2Vec2(carGame.person.currentStepDistance / 100,0);
+    } else if (direction == LEFT) {
+        var vector = new b2Vec2(carGame.person.currentStepDistance * -1 / 100,0);
+    }
+    carGame.person.SetLinearVelocity(vector);
+    carGame.person.lastPressedKey = direction;
 }
 
 function isOnAir() {
