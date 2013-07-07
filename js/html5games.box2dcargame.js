@@ -1,5 +1,10 @@
-var carGame = {
+var myGame = {
 
+    STEP_DISTANCE: 18000,
+    STEP_DISTANCE_ON_AIR: 25000,
+    JUMP_ALTITUDE: 150000,
+    lives: 3,
+    time: 20000
 }
 var canvas;
 var ctx;
@@ -9,9 +14,7 @@ var canvasHeight;
 LEFT = 65;
 RIGHT = 68;
 JUMP = 87;
-STEP_DISTANCE = 18000;
-STEP_DISTANCE_ON_AIR = 25000;
-JUMP_ALTITUDE = 150000;
+
 
 $(function() {
     $(document).keydown(function(e) {
@@ -28,11 +31,11 @@ $(function() {
             case JUMP: //up - w
 
                 if (!isFlying) {
-                    goDown(JUMP_ALTITUDE * -1); //negative, so we JUMP
+                    goDown(myGame.JUMP_ALTITUDE * -1); //negative, so we JUMP
                 } else {
                     goDown(100000);
                 }
-                carGame.person.lastPressedKey = JUMP;
+                myGame.person.lastPressedKey = JUMP;
                 break;
         }
 
@@ -40,13 +43,13 @@ $(function() {
 
     $(document).keyup(function(e) {
 
-        carGame.person.lastReleasedKey = e.keyCode;
-        carGame.person.SetLinearVelocity(new b2Vec2(0, 0));
-        carGame.person.SetAngularVelocity(0);
+        myGame.person.lastReleasedKey = e.keyCode;
+        myGame.person.SetLinearVelocity(new b2Vec2(0, 0));
+        myGame.person.SetAngularVelocity(0);
     });
 
     // create the world
-    carGame.world = createWorld();
+    myGame.world = createWorld();
     // create the ground
     createGround(100, 10, 100, 250, 8); //goal
     createGround(80, 10, 400, 120, 7); //
@@ -65,9 +68,9 @@ $(function() {
 
 
 
-    carGame.lava = createGround(800, 25, 550, 670);//base - lava
-    carGame.person = createPersonAt(750, 500);
-    //carGame.person = createPersonAt(350, 1010);
+    myGame.lava = createGround(800, 25, 550, 670);//base - lava
+    myGame.person = createPersonAt(750, 500);
+    //myGame.person = createPersonAt(350, 1010);
 
 
 
@@ -77,7 +80,7 @@ $(function() {
     canvasWidth = parseInt(canvas.width);
     canvasHeight = parseInt(canvas.height);
     // draw the world
-    drawWorld(carGame.world, ctx);
+    drawWorld(myGame.world, ctx);
 
     // start advancing the step
     step();
@@ -96,7 +99,7 @@ function createPersonAt(x, y) {
     boxBd.position.Set(x, y);
     boxBd.preventRotation = true;
 
-    return carGame.world.CreateBody(boxBd);
+    return myGame.world.CreateBody(boxBd);
 }
 
 function createWorld() {
@@ -125,7 +128,7 @@ function createGround(width, height, positionX, positionY, index) {
     groundBd.AddShape(groundSd);
     groundBd.position.Set(positionX, positionY);
     groundBd.m_userData = index;
-    var body = carGame.world.CreateBody(groundBd);
+    var body = myGame.world.CreateBody(groundBd);
     return body;
 }
 
@@ -183,54 +186,54 @@ function drawShape(shape, context) {
 }
 
 function step() {
-    carGame.world.Step(1.0/60, 1);
+    myGame.world.Step(1.0/60, 1);
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    drawWorld(carGame.world, ctx);
+    drawWorld(myGame.world, ctx);
     setTimeout(step, 20);
-    for (var cn = carGame.world.GetContactList(); cn != null; cn = cn.GetNext()) {
+    for (var cn = myGame.world.GetContactList(); cn != null; cn = cn.GetNext()) {
         var body1 = cn.GetShape1().GetBody();
         var body2 = cn.GetShape2().GetBody();
-        if (body1 == carGame.lava || body2 == carGame.lava) { //character is on lava,
-            carGame.world.DestroyBody(carGame.person);
+        if (body1 == myGame.lava || body2 == myGame.lava) { //character is on lava,
+            myGame.world.DestroyBody(myGame.person);
         }
     }
 }
 
 function movePerson(direction, isFlying) {
-    carGame.person.currentStepDistance = (isFlying? STEP_DISTANCE_ON_AIR : STEP_DISTANCE);
+    myGame.person.currentStepDistance = (isFlying? myGame.STEP_DISTANCE_ON_AIR : myGame.STEP_DISTANCE);
     /*console.log("-------------------------------");
     console.log("flying: " + isFlying);
     console.log("direction: " + direction);
-    console.log("released: " + carGame.person.lastReleasedKey);
-    console.log("pressed: " + carGame.person.lastPressedKey);
+    console.log("released: " + myGame.person.lastReleasedKey);
+    console.log("pressed: " + myGame.person.lastPressedKey);
     console.log("-------------------------------");*/
 
-    //if (isFlying && (carGame.person.lastReleasedKey == direction && carGame.person.lastPressedKey == direction)) {
-    if (isFlying && (carGame.person.lastPressedKey == direction)) {
+    //if (isFlying && (myGame.person.lastReleasedKey == direction && myGame.person.lastPressedKey == direction)) {
+    if (isFlying && (myGame.person.lastPressedKey == direction)) {
 
         return;
     }
     if (direction == RIGHT) {
-        var vector = new b2Vec2(carGame.person.currentStepDistance / 100,0);
+        var vector = new b2Vec2(myGame.person.currentStepDistance / 100,0);
     } else if (direction == LEFT) {
-        var vector = new b2Vec2(carGame.person.currentStepDistance * -1 / 100,0);
+        var vector = new b2Vec2(myGame.person.currentStepDistance * -1 / 100,0);
     }
-    carGame.person.SetLinearVelocity(vector);
-    carGame.person.lastPressedKey = direction;
+    myGame.person.SetLinearVelocity(vector);
+    myGame.person.lastPressedKey = direction;
 }
 
 function isOnAir() {
-    var x = Math.abs(carGame.person.GetLinearVelocity().x);
-    var y = carGame.person.GetLinearVelocity().y;
+    var x = Math.abs(myGame.person.GetLinearVelocity().x);
+    var y = myGame.person.GetLinearVelocity().y;
     //console.log("/////");
     //console.log("X: " + x + " Y: " + y);
-    //return !(x == 0 && y == 0 || (x == STEP_DISTANCE / 100));
-    if (carGame.person.currentStepDistance === undefined) {
-        carGame.person.currentStepDistance = STEP_DISTANCE;
+    //return !(x == 0 && y == 0 || (x == MyGame.STEP_DISTANCE / 100));
+    if (myGame.person.currentStepDistance === undefined) {
+        myGame.person.currentStepDistance = myGame.STEP_DISTANCE;
     }
-    //console.log("step " + carGame.person.currentStepDistance);
+    //console.log("step " + myGame.person.currentStepDistance);
     //console.log("/////");
-    if (x == 0 && y == 0 || (x == carGame.person.currentStepDistance / 100 && y == 0)) {
+    if (x == 0 && y == 0 || (x == myGame.person.currentStepDistance / 100 && y == 0)) {
         return false;
     } //else if () {
         return true;
@@ -239,5 +242,5 @@ function isOnAir() {
 
 function goDown(magnitude) {
     var impulse = new b2Vec2(0, magnitude);
-    carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
+    myGame.person.ApplyImpulse(impulse, myGame.person.GetCenterPosition());
 }
