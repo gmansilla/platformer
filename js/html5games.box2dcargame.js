@@ -18,27 +18,16 @@ JUMP = 87;
 
 myGame.levels[0] = [
     { "type": "person", "x": 750, "y": 500 },
-    { "type": "platform", "width": 100, "height": 10, "x": 100, "y": 250, "rotation": 0 },
-    { "type": "platform", "width": 80, "height": 10, "x": 400, "y": 120, "rotation": 0 },
-    { "type": "platform", "width": 100, "height": 10, "x": 500, "y": 220, "rotation": 0 },
-    { "type": "platform", "width": 80, "height": 10, "x": 760, "y": 300, "rotation": 0 },
-    { "type": "platform", "width": 80, "height": 10, "x": 700, "y": 410, "rotation": 0 },
-    { "type": "platform", "width": 99, "height": 10, "x": 980, "y": 500, "rotation": 0 },
-    { "type": "platform", "width": 100, "height": 10, "x": 600, "y": 520, "rotation": 0 },
-    { "type": "platform", "width": 90, "height": 10, "x": 750, "y": 600, "rotation": 0 }
+    { "type": "win", "width": 20, "height": 30, "x": 100, "y": 210, "rotation": 0, "friction": 0},
+    { "type": "platform", "width": 100, "height": 10, "x": 100, "y": 250, "rotation": 0, "friction": 0},
+    { "type": "platform", "width": 80, "height": 10, "x": 400, "y": 120, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 100, "height": 10, "x": 500, "y": 220, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 80, "height": 10, "x": 760, "y": 300, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 80, "height": 10, "x": 700, "y": 410, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 99, "height": 10, "x": 980, "y": 500, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 100, "height": 10, "x": 600, "y": 520, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 90, "height": 10, "x": 750, "y": 600, "rotation": 0, "friction": 0 }
 ];
-
-/*
- createGround(width, height, positionX, positionY)
- createGround(100, 10, 100, 250, 8); //goal
- createGround(80, 10, 400, 120, 7); //
- createGround(100, 10, 500, 220, 6); //
- createGround(80, 10, 760, 300, 5); //
- createGround(80, 10, 700, 410, 4); //
- createGround(99, 10, 980, 500, 3); //
- createGround(100, 10, 600, 520, 2); //
- createGround(90, 10, 750, 600, 1); //
- */
 
 
 $(function() {
@@ -69,7 +58,7 @@ $(function() {
     $(document).keyup(function(e) {
 
         myGame.person.lastReleasedKey = e.keyCode;
-        myGame.person.SetLinearVelocity(new b2Vec2(0, 0));
+        myGame.person.SetLinearVelocity(new b2Vec2(0, 500));
         myGame.person.SetAngularVelocity(0);
     });
 
@@ -97,9 +86,11 @@ function restartGame(level) {
         var obj = myGame.levels[level][i];
 
         if (obj.type == "platform") {
-            createGround(obj.width, obj.height, obj.x, obj.y, obj.rotation);
+            createGround(obj.width, obj.height, obj.x, obj.y, obj.rotation, obj.friction);
         } else if (obj.type == "person") {
             myGame.person = createPersonAt(obj.x, obj.y);
+        } else if (obj.type == "win") {
+            myGame.win = createGround(obj.width, obj.height, obj.x, obj.y, obj.rotation, obj.friction);
         }
     }
 
@@ -136,11 +127,12 @@ function createWorld() {
     return world;
 }
 
-function createGround(width, height, positionX, positionY, rotation) {
+function createGround(width, height, positionX, positionY, rotation, friction) {
     // box shape definition
     var groundSd = new b2BoxDef();
     groundSd.extents.Set(width, height);
     groundSd.restitution = 0;
+    groundSd.friction = friction;
 
     // body definition with the given shape we just created.
     var groundBd = new b2BodyDef();
@@ -221,6 +213,11 @@ function step() {
                 alert("you failed! lets try again");
                 restartGame(myGame.currentLevel);
             }
+        } else if ((body1 == myGame.person && body2 == myGame.win) ||
+            (body1 == myGame.win && body2 == myGame.person)) {
+                //myGame.currentLevel++;
+                alert("Win!");
+                restartGame(myGame.currentLevel);
         }
     }
 }
