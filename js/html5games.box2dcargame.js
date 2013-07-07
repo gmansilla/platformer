@@ -13,6 +13,8 @@ STEP_DISTANCE = 57000;
 JUMP_ALTITUDE = 100000;
 $(function() {
     $(document).keydown(function(e) {
+        //console.log(carGame.person.GetAngularVelocity());
+
 
         switch(e.keyCode) {
             case LEFT: // left - a
@@ -30,7 +32,7 @@ $(function() {
                     break;
                 }
                 if (isOnAir()) {
-                    
+
                 } else {
 
                 }
@@ -51,7 +53,7 @@ $(function() {
     });
 
     $(document).keyup(function(e) {
-        //console.log('key up ');
+
         carGame.person.lastReleasedKey = e.keyCode;
         carGame.person.SetLinearVelocity(new b2Vec2(0,0));
         carGame.person.SetAngularVelocity(0);
@@ -112,19 +114,6 @@ function createWorld() {
 }
 
 function createGround(width, height, positionX, positionY) {
-   /*
-    // box shape definition
-    var groundSd = new b2BoxDef();
-    groundSd.extents.Set(250, 25);
-    groundSd.restitution = 0;
-    // body definition with the given shape we just created.
-    var groundBd = new b2BodyDef();
-    groundBd.AddShape(groundSd);
-    groundBd.position.Set(250, 370);
-    var body = carGame.world.CreateBody(groundBd);
-    return body;
-    */
-
     // box shape definition
     var groundSd = new b2BoxDef();
     groundSd.extents.Set(width, height);
@@ -202,6 +191,7 @@ function isOnAir() {
     for (var cn = carGame.world.GetContactList(); cn != null; cn = cn.GetNext()) {
         var body1 = cn.GetShape1().GetBody();
         var body2 = cn.GetShape2().GetBody();
+
         if (body1 == carGame.person || body2 == carGame.person) {
             return false;
         }
