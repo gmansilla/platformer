@@ -1,10 +1,11 @@
 var myGame = {
-
     STEP_DISTANCE: 18000,
     STEP_DISTANCE_ON_AIR: 25000,
     JUMP_ALTITUDE: 150000,
+    currentLevel: 0,
     lives: 3,
-    time: 20000
+    time: 20000,
+    levels: []
 }
 var canvas;
 var ctx;
@@ -14,6 +15,30 @@ var canvasHeight;
 LEFT = 65;
 RIGHT = 68;
 JUMP = 87;
+
+myGame.levels[0] = [
+    { "type": "person", "x": 750, "y": 500 },
+    { "type": "platform", "width": 100, "height": 10, "x": 100, "y": 250, "rotation": 0 },
+    { "type": "platform", "width": 80, "height": 10, "x": 400, "y": 120, "rotation": 0 },
+    { "type": "platform", "width": 100, "height": 10, "x": 500, "y": 220, "rotation": 0 },
+    { "type": "platform", "width": 80, "height": 10, "x": 760, "y": 300, "rotation": 0 },
+    { "type": "platform", "width": 80, "height": 10, "x": 700, "y": 410, "rotation": 0 },
+    { "type": "platform", "width": 99, "height": 10, "x": 980, "y": 500, "rotation": 0 },
+    { "type": "platform", "width": 100, "height": 10, "x": 600, "y": 520, "rotation": 0 },
+    { "type": "platform", "width": 90, "height": 10, "x": 750, "y": 600, "rotation": 0 }
+];
+
+/*
+ createGround(width, height, positionX, positionY)
+ createGround(100, 10, 100, 250, 8); //goal
+ createGround(80, 10, 400, 120, 7); //
+ createGround(100, 10, 500, 220, 6); //
+ createGround(80, 10, 760, 300, 5); //
+ createGround(80, 10, 700, 410, 4); //
+ createGround(99, 10, 980, 500, 3); //
+ createGround(100, 10, 600, 520, 2); //
+ createGround(90, 10, 750, 600, 1); //
+ */
 
 
 $(function() {
@@ -48,43 +73,37 @@ $(function() {
         myGame.person.SetAngularVelocity(0);
     });
 
-    // create the world
-    myGame.world = createWorld();
-    // create the ground
-    createGround(100, 10, 100, 250, 8); //goal
-    createGround(80, 10, 400, 120, 7); //
-    createGround(100, 10, 500, 220, 6); //
-    createGround(80, 10, 760, 300, 5); //
-    createGround(80, 10, 700, 410, 4); //
-    createGround(99, 10, 980, 500, 3); //
-
-    createGround(100, 10, 600, 520, 2); //
-
-    createGround(90, 10, 750, 600, 1); //
-
-
-
-    //createGround(width, height, positionX, positionY) {
-
-
-
-    myGame.lava = createGround(800, 25, 550, 670);//base - lava
-    myGame.person = createPersonAt(750, 500);
-    //myGame.person = createPersonAt(350, 1010);
-
-
-
     // get the reference of the context
     canvas = document.getElementById('game');
     ctx = canvas.getContext('2d');
     canvasWidth = parseInt(canvas.width);
     canvasHeight = parseInt(canvas.height);
-    // draw the world
-    drawWorld(myGame.world, ctx);
 
+
+
+    restartGame(myGame.currentLevel);
+    drawWorld(myGame.world, ctx);
     // start advancing the step
     step();
 });
+
+function restartGame(level) {
+    myGame.currentLevel = level;
+    myGame.world = createWorld();
+    myGame.lava = createGround(800, 25, 550, 670, 0);//base - lava
+
+
+    for (var i = 0; i < myGame.levels[level].length; i++) {
+        var obj = myGame.levels[level][i];
+
+        if (obj.type == "platform") {
+            createGround(obj.width, obj.height, obj.x, obj.y, obj.rotation);
+        } else if (obj.type == "person") {
+            myGame.person = createPersonAt(obj.x, obj.y);
+        }
+    }
+
+}
 
 function createPersonAt(x, y) {
     // create a box
@@ -117,7 +136,7 @@ function createWorld() {
     return world;
 }
 
-function createGround(width, height, positionX, positionY, index) {
+function createGround(width, height, positionX, positionY, rotation) {
     // box shape definition
     var groundSd = new b2BoxDef();
     groundSd.extents.Set(width, height);
@@ -127,7 +146,7 @@ function createGround(width, height, positionX, positionY, index) {
     var groundBd = new b2BodyDef();
     groundBd.AddShape(groundSd);
     groundBd.position.Set(positionX, positionY);
-    groundBd.m_userData = index;
+    groundBd.rotation = rotation * Math.PI / 180;
     var body = myGame.world.CreateBody(groundBd);
     return body;
 }
