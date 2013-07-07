@@ -16,28 +16,30 @@ $(function() {
 
         switch(e.keyCode) {
             case LEFT: // left - a
+                carGame.person.lastPressedKey = LEFT;
                 var impulse = new b2Vec2(-57000, 0);
                 //carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
                 carGame.person.SetLinearVelocity(new b2Vec2(-570,0));
-                carGame.person.lastMove = LEFT;
+
                 break;
 
             case RIGHT: // right - d
-                if (isOnAir() && carGame.person.lastRelasedKey == RIGHT) {
+                if (isOnAir() && carGame.person.lastReleasedKey == RIGHT && carGame.person.lastPressedKey == RIGHT) {
                     console.log("preventing");
                     return;
                 }
                 var impulse = new b2Vec2(57000, 0);
                 //carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
                 carGame.person.SetLinearVelocity(new b2Vec2(570,0));
-                carGame.person.currentMove = RIGHT;
-                return;
+                carGame.person.lastPressedKey = RIGHT;
+
 
 
 
                 break;
 
             case JUMP: //up - w
+                carGame.person.lastPressedKey = JUMP;
                 //console.log('down ' + carGame.person.isJumping);
                 if (!isOnAir() && carGame.person.isJumping == false || carGame.person.isJumping == undefined) {
                     goDown(-57000);
@@ -50,7 +52,7 @@ $(function() {
 
     $(document).keyup(function(e) {
         //console.log('key up ');
-        carGame.person.lastRelasedKey = e.keyCode;
+        carGame.person.lastReleasedKey = e.keyCode;
         carGame.person.isJumping = false; //? ya no es necesaria?
         carGame.person.SetLinearVelocity(new b2Vec2(0,0));
         carGame.person.SetAngularVelocity(0);
