@@ -10,8 +10,8 @@ LEFT = 65;
 RIGHT = 68;
 JUMP = 87;
 STEP_DISTANCE = 18000;
-STEP_DISTANCE_ON_AIR = 36000;
-JUMP_ALTITUDE = 100000;
+STEP_DISTANCE_ON_AIR = 25000;
+JUMP_ALTITUDE = 150000;
 
 $(function() {
     $(document).keydown(function(e) {
@@ -26,12 +26,13 @@ $(function() {
                 break;
 
             case JUMP: //up - w
-                carGame.person.lastPressedKey = JUMP;
+
                 if (!isFlying) {
                     goDown(JUMP_ALTITUDE * -1); //negative, so we JUMP
                 } else {
-                    goDown(10000);
+                    goDown(100000);
                 }
+                carGame.person.lastPressedKey = JUMP;
                 break;
         }
 
@@ -40,23 +41,23 @@ $(function() {
     $(document).keyup(function(e) {
 
         carGame.person.lastReleasedKey = e.keyCode;
-        carGame.person.SetLinearVelocity(new b2Vec2(0,0));
+        carGame.person.SetLinearVelocity(new b2Vec2(0, 0));
         carGame.person.SetAngularVelocity(0);
     });
 
     // create the world
     carGame.world = createWorld();
     // create the ground
-    createGround(100, 10, 100, 250); //goal
-    createGround(80, 10, 400, 120); //2
-    createGround(100, 10, 500, 200); //3
-    createGround(80, 10, 760, 280); //4
-    createGround(80, 10, 700, 400); //5
-    createGround(99, 10, 980, 500); //
+    createGround(100, 10, 100, 250, 8); //goal
+    createGround(80, 10, 400, 120, 7); //
+    createGround(100, 10, 500, 220, 6); //
+    createGround(80, 10, 760, 300, 5); //
+    createGround(80, 10, 700, 410, 4); //
+    createGround(99, 10, 980, 500, 3); //
 
-    createGround(100, 10, 600, 520); //
+    createGround(100, 10, 600, 520, 2); //
 
-    createGround(90, 10, 750, 600); //8
+    createGround(90, 10, 750, 600, 1); //
 
 
 
@@ -113,15 +114,17 @@ function createWorld() {
     return world;
 }
 
-function createGround(width, height, positionX, positionY) {
+function createGround(width, height, positionX, positionY, index) {
     // box shape definition
     var groundSd = new b2BoxDef();
     groundSd.extents.Set(width, height);
     groundSd.restitution = 0;
+
     // body definition with the given shape we just created.
     var groundBd = new b2BodyDef();
     groundBd.AddShape(groundSd);
     groundBd.position.Set(positionX, positionY);
+    groundBd.m_userData = index;
     var body = carGame.world.CreateBody(groundBd);
     return body;
 }
@@ -183,13 +186,32 @@ function step() {
     carGame.world.Step(1.0/60, 1);
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     drawWorld(carGame.world, ctx);
-    setTimeout(step, 10);
+    setTimeout(step, 20);
+    for (var cn = carGame.world.GetContactList(); cn != null; cn = cn.GetNext()) {
+        var body1 = cn.GetShape1().GetBody();
+        var body2 = cn.GetShape2().GetBody();
+        if (body1 == carGame.person) {
+            console.log(cn.GetShape1());
+        }
+
+
+        //console.log(body2.groupIndex);
+    }
 
 }
 
 function movePerson(direction, isFlying) {
     carGame.person.currentStepDistance = (isFlying? STEP_DISTANCE_ON_AIR : STEP_DISTANCE);
-    if (isFlying && carGame.person.lastReleasedKey == direction && carGame.person.lastPressedKey == direction) {
+    console.log("-------------------------------");
+    console.log("flying: " + isFlying);
+    console.log("direction: " + direction);
+    console.log("released: " + carGame.person.lastReleasedKey);
+    console.log("pressed: " + carGame.person.lastPressedKey);
+    console.log("-------------------------------");
+
+    //if (isFlying && (carGame.person.lastReleasedKey == direction && carGame.person.lastPressedKey == direction)) {
+    if (isFlying && (carGame.person.lastPressedKey == direction)) {
+
         return;
     }
     if (direction == RIGHT) {
@@ -202,14 +224,16 @@ function movePerson(direction, isFlying) {
 }
 
 function isOnAir() {
-    var x = carGame.person.GetLinearVelocity().x;
+    var x = Math.abs(carGame.person.GetLinearVelocity().x);
     var y = carGame.person.GetLinearVelocity().y;
+    //console.log("/////");
     //console.log("X: " + x + " Y: " + y);
     //return !(x == 0 && y == 0 || (x == STEP_DISTANCE / 100));
     if (carGame.person.currentStepDistance === undefined) {
         carGame.person.currentStepDistance = STEP_DISTANCE;
     }
-
+    //console.log("step " + carGame.person.currentStepDistance);
+    //console.log("/////");
     if (x == 0 && y == 0 || (x == carGame.person.currentStepDistance / 100 && y == 0)) {
         return false;
     } //else if () {
