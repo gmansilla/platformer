@@ -23,32 +23,35 @@ $(function() {
                 break;
 
             case RIGHT: // right - d
+                if (isOnAir() && carGame.person.lastRelasedKey == RIGHT) {
+                    console.log("preventing");
+                    return;
+                }
                 var impulse = new b2Vec2(57000, 0);
                 //carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
                 carGame.person.SetLinearVelocity(new b2Vec2(570,0));
-                carGame.person.lastMove = RIGHT;
+                carGame.person.currentMove = RIGHT;
+                return;
+
+
+
                 break;
 
             case JUMP: //up - w
                 //console.log('down ' + carGame.person.isJumping);
                 if (!isOnAir() && carGame.person.isJumping == false || carGame.person.isJumping == undefined) {
-                    var impulse = new b2Vec2(0, -57000);
-                    carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
-                    //carGame.person.SetLinearVelocity(new b2Vec2(0, -570));
-                    carGame.person.isJumping = true;
-                    //console.log(carGame.person.GetLinearVelocity());
+                    goDown(-57000);
                 }
 
                 break;
         }
+
     });
 
     $(document).keyup(function(e) {
-
-
-        console.log(isOnAir());
-        //console.log('up ' + carGame.person.isJumping);
-        carGame.person.isJumping = false;
+        //console.log('key up ');
+        carGame.person.lastRelasedKey = e.keyCode;
+        carGame.person.isJumping = false; //? ya no es necesaria?
         carGame.person.SetLinearVelocity(new b2Vec2(0,0));
         carGame.person.SetAngularVelocity(0);
     });
@@ -191,3 +194,11 @@ function isOnAir() {
     return true;
 }
 
+function goDown(magnitude) {
+//console.log(magnitude);
+    var impulse = new b2Vec2(0, magnitude);
+    carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
+    //carGame.person.SetLinearVelocity(new b2Vec2(0, -570));
+    carGame.person.isJumping = true;
+    //console.log(carGame.person.GetLinearVelocity());
+}
