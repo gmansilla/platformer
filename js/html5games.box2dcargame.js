@@ -214,6 +214,13 @@ function step() {
         var body2 = cn.GetShape2().GetBody();
         if (body1 == myGame.lava || body2 == myGame.lava) { //character is on lava,
             myGame.world.DestroyBody(myGame.person);
+            myGame.lives--;
+            if (myGame.lives < 0) {
+                alert("game over");
+            } else {
+                alert("you failed! lets try again");
+                restartGame(myGame.currentLevel);
+            }
         }
     }
 }
