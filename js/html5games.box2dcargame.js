@@ -49,8 +49,9 @@ $(function() {
                 carGame.person.lastPressedKey = JUMP;
                 console.log("jumping");
                 if (!isOnAir()) {
-                    goDown(JUMP_ALTITUDE * -1);
+                    goDown(JUMP_ALTITUDE * -1); //negative, so we JUMP
                 } else {
+                    goDown(100000);
                     console.log("preventing");
 
                 }
@@ -202,7 +203,7 @@ function isOnAir() {
     if (carGame.person.currentStepDistance === undefined) {
         carGame.person.currentStepDistance = STEP_DISTANCE;
     }
-    
+
     if (x == 0 && y == 0 || (x == carGame.person.currentStepDistance / 100 && y == 0)) {
         return false;
     } //else if () {
@@ -211,11 +212,6 @@ function isOnAir() {
 }
 
 function goDown(magnitude) {
-//console.log(magnitude);
     var impulse = new b2Vec2(0, magnitude);
     carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
-    //carGame.person.SetLinearVelocity(new b2Vec2(0, -570));
-    carGame.person.isJumping = true;
-    //console.log(carGame.person.GetLinearVelocity());
-    return;
 }
