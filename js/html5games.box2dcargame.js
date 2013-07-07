@@ -9,8 +9,8 @@ var canvasHeight;
 LEFT = 65;
 RIGHT = 68;
 JUMP = 87;
-
-
+STEP_DISTANCE = 57000;
+JUMP_ALTITUDE = 100000;
 $(function() {
     $(document).keydown(function(e) {
 
@@ -19,9 +19,9 @@ $(function() {
                 if (isOnAir() && carGame.person.lastReleasedKey == LEFT && carGame.person.lastPressedKey == LEFT) {
                     break;
                 }
-                var impulse = new b2Vec2(-57000, 0);
+                var impulse = new b2Vec2(STEP_DISTANCE * -1, 0);
                 //carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
-                carGame.person.SetLinearVelocity(new b2Vec2(-570,0));
+                carGame.person.SetLinearVelocity(new b2Vec2( -1 * STEP_DISTANCE / 100 ,0));
                 carGame.person.lastPressedKey = LEFT;
                 break;
 
@@ -29,16 +29,21 @@ $(function() {
                 if (isOnAir() && carGame.person.lastReleasedKey == RIGHT && carGame.person.lastPressedKey == RIGHT) {
                     break;
                 }
-                var impulse = new b2Vec2(57000, 0);
+                if (isOnAir()) {
+                    
+                } else {
+
+                }
+                var impulse = new b2Vec2(STEP_DISTANCE, 0);
                 //carGame.person.ApplyImpulse(impulse, carGame.person.GetCenterPosition());
-                carGame.person.SetLinearVelocity(new b2Vec2(570,0));
+                carGame.person.SetLinearVelocity(new b2Vec2(STEP_DISTANCE / 100,0));
                 carGame.person.lastPressedKey = RIGHT;
                 break;
 
             case JUMP: //up - w
                 carGame.person.lastPressedKey = JUMP;
                 if (!isOnAir()) {
-                    goDown(-57000);
+                    goDown(JUMP_ALTITUDE * -1);
                 }
                 break;
         }
@@ -48,7 +53,6 @@ $(function() {
     $(document).keyup(function(e) {
         //console.log('key up ');
         carGame.person.lastReleasedKey = e.keyCode;
-        carGame.person.isJumping = false; //? ya no es necesaria?
         carGame.person.SetLinearVelocity(new b2Vec2(0,0));
         carGame.person.SetAngularVelocity(0);
     });
@@ -56,7 +60,9 @@ $(function() {
     // create the world
     carGame.world = createWorld();
     // create the ground
-    createGround();
+    createGround(100, 25, 650, 470);
+    createGround(250, 25, 250, 370);
+
 
     carGame.person = createPersonAt(50, 210);
 
@@ -105,7 +111,8 @@ function createWorld() {
     return world;
 }
 
-function createGround() {
+function createGround(width, height, positionX, positionY) {
+   /*
     // box shape definition
     var groundSd = new b2BoxDef();
     groundSd.extents.Set(250, 25);
@@ -114,6 +121,18 @@ function createGround() {
     var groundBd = new b2BodyDef();
     groundBd.AddShape(groundSd);
     groundBd.position.Set(250, 370);
+    var body = carGame.world.CreateBody(groundBd);
+    return body;
+    */
+
+    // box shape definition
+    var groundSd = new b2BoxDef();
+    groundSd.extents.Set(width, height);
+    groundSd.restitution = 0;
+    // body definition with the given shape we just created.
+    var groundBd = new b2BodyDef();
+    groundBd.AddShape(groundSd);
+    groundBd.position.Set(positionX, positionY);
     var body = carGame.world.CreateBody(groundBd);
     return body;
 }
