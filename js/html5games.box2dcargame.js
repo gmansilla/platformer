@@ -65,7 +65,7 @@ $(function() {
 
 
 
-    createGround(800, 25, 550, 670);//base - lava
+    carGame.lava = createGround(800, 25, 550, 670);//base - lava
     carGame.person = createPersonAt(750, 500);
     //carGame.person = createPersonAt(350, 1010);
 
@@ -190,24 +190,20 @@ function step() {
     for (var cn = carGame.world.GetContactList(); cn != null; cn = cn.GetNext()) {
         var body1 = cn.GetShape1().GetBody();
         var body2 = cn.GetShape2().GetBody();
-        if (body1 == carGame.person) {
-            console.log(cn.GetShape1());
+        if (body1 == carGame.lava || body2 == carGame.lava) { //character is on lava,
+            carGame.world.DestroyBody(carGame.person);
         }
-
-
-        //console.log(body2.groupIndex);
     }
-
 }
 
 function movePerson(direction, isFlying) {
     carGame.person.currentStepDistance = (isFlying? STEP_DISTANCE_ON_AIR : STEP_DISTANCE);
-    console.log("-------------------------------");
+    /*console.log("-------------------------------");
     console.log("flying: " + isFlying);
     console.log("direction: " + direction);
     console.log("released: " + carGame.person.lastReleasedKey);
     console.log("pressed: " + carGame.person.lastPressedKey);
-    console.log("-------------------------------");
+    console.log("-------------------------------");*/
 
     //if (isFlying && (carGame.person.lastReleasedKey == direction && carGame.person.lastPressedKey == direction)) {
     if (isFlying && (carGame.person.lastPressedKey == direction)) {
