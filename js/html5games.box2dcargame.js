@@ -3,9 +3,9 @@ var myGame = {
     STEP_DISTANCE_ON_AIR: 25000,
     JUMP_ALTITUDE: 150000,
     LIVES: 3,
-    score: 10000,
     MOVE_POINTS: 10,
     TIME_FRAME: 15,
+    score: 9999,
     currentLevel: 0,
     lives: 3,
     time: 20000,
@@ -114,7 +114,9 @@ $(function() {
         easing: false, // the easing function to apply to animations, you can override this with a jQuery.easing method
         duration:1000 // duration of animations
     });
-    $(".counter").flipCounter("setNumber", 0);
+    $("#counterTime").flipCounter("setNumber", 0);
+    $("#counterScore").flipCounter("setNumber", myGame.score);
+
     var currentTime = new Date();
     myGame.lastUpdate = myGame.startTime = currentTime.getTime();
     step();
@@ -252,7 +254,6 @@ function step() {
         myGame.lastUpdate = currentTime;
     }
 
-
     for (var cn = myGame.world.GetContactList(); cn != null; cn = cn.GetNext()) {
         var body1 = cn.GetShape1().GetBody();
         var body2 = cn.GetShape2().GetBody();
@@ -296,7 +297,7 @@ function movePerson(direction, isFlying) {
         var vector = new b2Vec2(myGame.person.currentStepDistance * -1 / 100,0);
     }
     myGame.score -= myGame.MOVE_POINTS;
-    console.log(myGame.score);
+    $("#counterScore").flipCounter("setNumber", myGame.score);
     myGame.person.SetLinearVelocity(vector);
     myGame.person.lastPressedKey = direction;
 }
