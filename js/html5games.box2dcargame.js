@@ -9,7 +9,10 @@ var myGame = {
     currentLevel: 0,
     lives: 3,
     time: 20000,
-    levels: []
+    levels: [],
+    startTime: 0,
+    lastUpdate: 0,
+    elapsedTime: 0
 }
 
 var canvas;
@@ -101,7 +104,7 @@ $(function() {
     restartGame(myGame.currentLevel);
     drawWorld(myGame.world, ctx);
     // start advancing the step
-    step();
+
     $(".counter").flipCounter({
         number:0, // the initial number the counter should display, overrides the hidden field
         numIntegralDigits:4, // number of places left of the decimal point to maintain
@@ -112,6 +115,9 @@ $(function() {
         duration:1000 // duration of animations
     });
     $(".counter").flipCounter("setNumber", 0);
+    var currentTime = new Date();
+    myGame.lastUpdate = myGame.startTime = currentTime.getTime();
+    step();
 });
 
 function restartGame(level) {
@@ -239,6 +245,14 @@ function step() {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     drawWorld(myGame.world, ctx);
     setTimeout(step, 20);
+    var currentTime = new Date();
+    currentTime = currentTime.getTime();
+    if ((currentTime - myGame.lastUpdate) > 1000) {
+        $("#counterTime").flipCounter("setNumber", ++myGame.elapsedTime);
+        myGame.lastUpdate = currentTime;
+    }
+
+
     for (var cn = myGame.world.GetContactList(); cn != null; cn = cn.GetNext()) {
         var body1 = cn.GetShape1().GetBody();
         var body2 = cn.GetShape2().GetBody();
