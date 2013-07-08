@@ -145,6 +145,8 @@ function restartGame(level) {
             myGame.win = createGround(obj.width, obj.height, obj.x, obj.y, obj.rotation, obj.friction);
         }
     }
+    $("#counterLevels").flipCounter("setNumber", myGame.levels.length - myGame.currentLevel);
+
 
 }
 
