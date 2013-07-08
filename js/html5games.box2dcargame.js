@@ -6,7 +6,7 @@ var myGame = {
     MOVE_POINTS: 10,
     TIME_FRAME: 5,
     TIME_COST: 25,
-    INITIAL_SCORE: 10,
+    INITIAL_SCORE: 1000,
     score: 0,
     currentLevel: 0,
     lives: 3,
@@ -119,6 +119,9 @@ $(function() {
     myGame.score = myGame.INITIAL_SCORE;
     $("#counterTime").flipCounter("setNumber", 0);
     $("#counterScore").flipCounter("setNumber", myGame.score);
+
+    $("#counterLives").flipCounter("setNumber", myGame.lives);
+    $("#counterLevels").flipCounter("setNumber", myGame.levels.length - myGame.currentLevel);
 
     var currentTime = new Date();
     myGame.lastUpdate = myGame.startTime = currentTime.getTime();
@@ -264,7 +267,6 @@ function step() {
             alert("Game Over. Either you made too much moves or you ran out of time");
             $("#counterScore").flipCounter("setNumber", 0);
             gameOver();
-            console.log(myGame.score);
         }
         $("#counterScore").flipCounter("setNumber", myGame.score);
     }
@@ -276,12 +278,15 @@ function step() {
 
         if (body1 == myGame.lava || body2 == myGame.lava) { //character is on lava,
             myGame.world.DestroyBody(myGame.person);
-            myGame.lives--;
-            if (myGame.lives < 1) {
+
+            if (myGame.lives == 0) {
                 alert("Game Over");
                 gameOver();
             } else {
+                myGame.lives--;
                 alert("you failed! lets try again");
+                $("#counterLives").flipCounter("setNumber", myGame.lives);
+                $("#counterLevels").flipCounter("setNumber", myGame.levels.length - myGame.currentLevel);
                 restartGame(myGame.currentLevel);
             }
         } else if ((body1 == myGame.person && body2 == myGame.win) ||
@@ -306,6 +311,8 @@ function gameOver() {
     myGame.lives = myGame.LIVES;
     $("#counterTime").flipCounter("setNumber", myGame.elapsedTime);
     $("#counterScore").flipCounter("setNumber", myGame.score);
+    $("#counterLives").flipCounter("setNumber", myGame.lives);
+    $("#counterLevels").flipCounter("setNumber", myGame.levels.length - myGame.currentLevel);
     restartGame(0);
 }
 
