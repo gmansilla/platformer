@@ -3,11 +3,15 @@ var myGame = {
     STEP_DISTANCE_ON_AIR: 25000,
     JUMP_ALTITUDE: 150000,
     LIVES: 3,
+    score: 10000,
+    MOVE_POINTS: 10,
+    TIME_FRAME: 15,
     currentLevel: 0,
     lives: 3,
     time: 20000,
     levels: []
 }
+
 var canvas;
 var ctx;
 var canvasWidth;
@@ -41,6 +45,17 @@ myGame.levels[1] = [
     { "type": "platform", "width": 99, "height": 10, "x": 980, "y": 500, "rotation": 0, "friction": 0 },
     { "type": "platform", "width": 100, "height": 10, "x": 600, "y": 520, "rotation": 0, "friction": 0 },
     { "type": "platform", "width": 90, "height": 10, "x": 750, "y": 600, "rotation": -10, "friction": 0 }
+];
+myGame.levels[2] = [
+    { "type": "person", "x": 420, "y": 50 },
+    { "type":      "win", "width": 20, "height": 30, "x": 950, "y": 210, "rotation": 0, "friction": 0},
+    { "type": "platform", "width": 100, "height": 10, "x": 900, "y": 250, "rotation": 0, "friction": 0},
+    { "type": "platform", "width": 80, "height": 10, "x": 400, "y": 120, "rotation": -20, "friction": 0 },
+    { "type": "platform", "width": 80, "height": 10, "x": 130, "y": 400, "rotation": 20, "friction": 0 },
+    { "type": "platform", "width": 40, "height": 10, "x": 680, "y": 300, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 50, "height": 10, "x": 350, "y": 500, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 80, "height": 10, "x": 570, "y": 420, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 30, "height": 10, "x": 600, "y": 50, "rotation": -40, "friction": 0 }
 ];
 
 
@@ -87,6 +102,16 @@ $(function() {
     drawWorld(myGame.world, ctx);
     // start advancing the step
     step();
+    $(".counter").flipCounter({
+        number:0, // the initial number the counter should display, overrides the hidden field
+        numIntegralDigits:4, // number of places left of the decimal point to maintain
+        digitHeight:40, // the height of each digit in the flipCounter-medium.png sprite image
+        digitWidth:30, // the width of each digit in the flipCounter-medium.png sprite image
+        imagePath:"images/flipCounter-medium.png", // the path to the sprite image relative to your html document
+        easing: false, // the easing function to apply to animations, you can override this with a jQuery.easing method
+        duration:1000 // duration of animations
+    });
+    $(".counter").flipCounter("setNumber", 0);
 });
 
 function restartGame(level) {
@@ -256,6 +281,8 @@ function movePerson(direction, isFlying) {
     } else if (direction == LEFT) {
         var vector = new b2Vec2(myGame.person.currentStepDistance * -1 / 100,0);
     }
+    myGame.score -= myGame.MOVE_POINTS;
+    console.log(myGame.score);
     myGame.person.SetLinearVelocity(vector);
     myGame.person.lastPressedKey = direction;
 }

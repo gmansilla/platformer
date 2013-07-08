@@ -14,6 +14,19 @@
 		<canvas id="game" width='1300' height='700' class="startscreen"></canvas>
 		<div id="fuel" class="progressbar">
 			<div class="fuel-value"></div>
+            <div id="score-board">
+                <table class="table center-table">
+                    <tr class="warning">
+                        <td><span class="spanCounter">Time elapsed</span></td>
+                        <td id="counterTime" class="counter"><input type="hidden" name="counter-value" value="0" /></td>
+                    </tr>
+                    <tr class="success">
+                        <td><span class="spanCounter">Score</span></td>
+                        <td id="counterScore" class="counter"><input type="hidden" name="counter-value" value="0" /></td>
+                    </tr>
+                </table>
+
+            </div>
 		</div>
 		<div id="level"></div>
 	</section>
@@ -92,5 +105,6 @@
 <script src='js/box2d/dynamics/joints/b2RevoluteJoint.js'></script>
 <script src='js/box2d/dynamics/joints/b2RevoluteJointDef.js'></script>
 <script src='js/html5games.box2dcargame.js'></script>
+<script src="js/jquery.flipCounter.1.2.pack.js"></script>
 </body>
 </html>
