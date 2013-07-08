@@ -4,7 +4,8 @@ var myGame = {
     JUMP_ALTITUDE: 150000,
     LIVES: 3,
     MOVE_POINTS: 10,
-    TIME_FRAME: 15,
+    TIME_FRAME: 5,
+    TIME_COST: 25,
     score: 9999,
     currentLevel: 0,
     lives: 3,
@@ -252,6 +253,10 @@ function step() {
     if ((currentTime - myGame.lastUpdate) > 1000) {
         $("#counterTime").flipCounter("setNumber", ++myGame.elapsedTime);
         myGame.lastUpdate = currentTime;
+        if (!(myGame.elapsedTime % myGame.TIME_FRAME)) {
+            myGame.score -= myGame.TIME_COST;
+            $("#counterScore").flipCounter("setNumber", myGame.score);
+        }
     }
 
     for (var cn = myGame.world.GetContactList(); cn != null; cn = cn.GetNext()) {
