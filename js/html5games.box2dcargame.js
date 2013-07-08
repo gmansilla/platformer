@@ -6,10 +6,11 @@ var myGame = {
     MOVE_POINTS: 10,
     TIME_FRAME: 5,
     TIME_COST: 25,
-    score: 9999,
+    INITIAL_SCORE: 10,
+    score: 0,
     currentLevel: 0,
     lives: 3,
-    time: 20000,
+    //time: 2000,
     levels: [],
     startTime: 0,
     lastUpdate: 0,
@@ -115,6 +116,7 @@ $(function() {
         easing: false, // the easing function to apply to animations, you can override this with a jQuery.easing method
         duration:1000 // duration of animations
     });
+    myGame.score = myGame.INITIAL_SCORE;
     $("#counterTime").flipCounter("setNumber", 0);
     $("#counterScore").flipCounter("setNumber", myGame.score);
 
@@ -248,6 +250,7 @@ function step() {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     drawWorld(myGame.world, ctx);
     setTimeout(step, 20);
+
     var currentTime = new Date();
     currentTime = currentTime.getTime();
     if ((currentTime - myGame.lastUpdate) > 1000) {
@@ -255,31 +258,55 @@ function step() {
         myGame.lastUpdate = currentTime;
         if (!(myGame.elapsedTime % myGame.TIME_FRAME)) {
             myGame.score -= myGame.TIME_COST;
-            $("#counterScore").flipCounter("setNumber", myGame.score);
+
         }
+        if (myGame.score < 1) {
+            alert("Game Over. Either you made too much moves or you ran out of time");
+            $("#counterScore").flipCounter("setNumber", 0);
+            gameOver();
+            console.log(myGame.score);
+        }
+        $("#counterScore").flipCounter("setNumber", myGame.score);
     }
+
 
     for (var cn = myGame.world.GetContactList(); cn != null; cn = cn.GetNext()) {
         var body1 = cn.GetShape1().GetBody();
         var body2 = cn.GetShape2().GetBody();
+
         if (body1 == myGame.lava || body2 == myGame.lava) { //character is on lava,
             myGame.world.DestroyBody(myGame.person);
             myGame.lives--;
-            if (myGame.lives < 0) {
-                alert("game over");
-                myGame.lives = myGame.LIVES;
-                myGame.currentLevel = 0;
+            if (myGame.lives < 1) {
+                alert("Game Over");
+                gameOver();
             } else {
                 alert("you failed! lets try again");
                 restartGame(myGame.currentLevel);
             }
         } else if ((body1 == myGame.person && body2 == myGame.win) ||
             (body1 == myGame.win && body2 == myGame.person)) {
+                var totalLevels = myGame.levels.length;
                 myGame.currentLevel++;
-                alert("Win!");
-                restartGame(myGame.currentLevel);
+                if (myGame.currentLevel == totalLevels) {
+                    alert("You have won the game");
+                    gameOver();
+                    restartGame(0);
+                } else if (myGame.currentLevel < totalLevels) {
+                    restartGame(myGame.currentLevel);
+                }
         }
     }
+}
+
+
+function gameOver() {
+    myGame.currentLevel =  myGame.lastUpdate = myGame.elapsedTime = 0;
+    myGame.score = myGame.INITIAL_SCORE;
+    myGame.lives = myGame.LIVES;
+    $("#counterTime").flipCounter("setNumber", myGame.elapsedTime);
+    $("#counterScore").flipCounter("setNumber", myGame.score);
+    restartGame(0);
 }
 
 function movePerson(direction, isFlying) {
