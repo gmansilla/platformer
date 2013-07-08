@@ -1,128 +1,79 @@
-html,
-body {
-    height: 100%;
+html, body{
+    background: url(../images/website_background.jpg);
+    font-family: 'Play', arial, serif;
 }
 
-#wrap, #welcome {
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -60px;
+em {
+    margin: 0 6px;
+    color: #006600;
 }
 
-#push, #push2
-#footer {
-    height: 60px;
+.startscreen {
+    /*background: #eee url(../images/starting_screen.jpg);*/
 }
 
-#footer {
-    background-color: #f5f5f5;
+.gamebg_level0 {
+    background: #eee url(../images/bg.jpg);
 }
 
-/* apply responsive CSS fixes as necessary */
-@media (max-width: 767px) {
-    #footer {
-        margin-left: -20px;
-        margin-right: -20px;
-        padding-left: 20px;
-        padding-right: 20px;
-    }
+.gamebg_level1 {
+    background: #eee url(../images/bg2.jpg);
 }
 
-.container {
-    width: auto;
-    max-width: 680px;
-}
-.container .credit {
-    margin: 20px 0;
+.gamebg_level2 {
+    background: #eee url(../images/bg3.jpg);
 }
 
-div#game {
-    width: 600px;
-    min-height: 500px;
-    background-image: url("../images/mole-background.png");
-    background-repeat:no-repeat;
-    background-size: 520px 500px;
+.gamebg_level3 {
+    background: #eee url(../images/bg4.jpg);
 }
 
-.top-section {
-    padding-top: 20px;
-    padding-left: 55px;
-    float: left;
+.gamebg_level4 {
+    background: #eee url(../images/bg5.jpg);
 }
 
-.middle-section {
-    float: left;
-    padding-top: 10px;
-    margin-left: 25px;
+.gamebg_won {
+    background: #eee url(../images/game_completed_screen.jpg);
 }
 
-.bottom-section {
-    float: left;
-    padding-top: 10px;
-    margin-left: 55px;
+#game {
+    width: 1300px;
 }
 
-.hole-image {
-    background-image: url("../images/hole.png"); width: 55px; height: 5px;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 5px;
-    vertical-align: bottom;
-}
-
-.hole-mole {
-    min-height: 104px;
-    position: relative;
-}
-
-.mole {
-    background-image: url("../images/mole.png"); width: 55px; height: 55px;
-    background-repeat: no-repeat;
-    width: 112px;
-    height: 104px;
+#asset {
     position: absolute;
+    top: -99999px;
 }
 
-.hole {
-    width: 112px;
-    min-height: 104px;
-    float: left;
-    margin-right: 40px;
-    margin-left: 0px;
-    margin-right: 15px;
+#game-container {
+    position: relative;
+    width: 1300px;
 }
 
-#controls {
-    clear: both;
-    text-align: center;
-    padding-right: 80px;
-    margin-top: 40px;
+#level {
+    position: absolute;
+    top: 10px;
+    left: 10px;
 }
 
-#score-board {
-    text-align: center;
-    padding-right: 80px;
+.progressbar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    width: 300px;
+    height:20px;
+    margin: 2px;
+    /*border: 1px solid #000;*/
+
+    /*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#8C906F), color-stop(48%,#8C906F), color-stop(51%,#323721), color-stop(54%,#55624F), color-stop(100%,#55624F)); /* webkit */
+    /*background: gradient(linear, left top, left bottom, color-stop(0%,#8C906F), color-stop(48%,#8C906F), color-stop(51%,#323721), color-stop(54%,#55624F), color-stop(100%,#55624F)); */
 }
 
-.center-table {
-    margin: 0 auto !important;
-    float: none !important;
-    width: 60% !important;
-}
-
-.modal-body {
-    min-height: 550px;
-}
-
-td {
-    font-size: 45px;
-}
-
-.spanCounter {
-    padding-top: 8px !important;
-}
-
-.modal-body-lose {
-    min-height: 100px;
+.progressbar .fuel-value {
+    height:50px;
+    background-color: pink;
+    /*
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#A8D751), color-stop(48%,#A8D751), color-stop(51%,#275606), color-stop(54%,#4A8A49), color-stop(100%,#4A8A49)); /* webkit */
+    /*background: gradient(linear, left top, left bottom, color-stop(0%,#A8D751), color-stop(48%,#A8D751), color-stop(51%,#275606), color-stop(54%,#4A8A49), color-stop(100%,#4A8A49));*/
 }

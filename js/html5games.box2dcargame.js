@@ -6,7 +6,7 @@ var myGame = {
     MOVE_POINTS: 10,
     TIME_FRAME: 5,
     TIME_COST: 25,
-    INITIAL_SCORE: 1000,
+    INITIAL_SCORE: 99999,
     score: 0,
     currentLevel: 0,
     lives: 3,
@@ -109,7 +109,7 @@ $(function() {
 
     $(".counter").flipCounter({
         number:0, // the initial number the counter should display, overrides the hidden field
-        numIntegralDigits:4, // number of places left of the decimal point to maintain
+        numIntegralDigits:3, // number of places left of the decimal point to maintain
         digitHeight:40, // the height of each digit in the flipCounter-medium.png sprite image
         digitWidth:30, // the width of each digit in the flipCounter-medium.png sprite image
         imagePath:"images/flipCounter-medium.png", // the path to the sprite image relative to your html document
@@ -118,9 +118,19 @@ $(function() {
     });
     myGame.score = myGame.INITIAL_SCORE;
     $("#counterTime").flipCounter("setNumber", 0);
+    $("#counterScore").flipCounter({
+        imagePath:"images/flipCounter-medium.png",
+        numIntegralDigits:3
+    });
     $("#counterScore").flipCounter("setNumber", myGame.score);
 
+    $("#counterLives").flipCounter({
+        imagePath:"images/flipCounter-medium.png"
+    });
     $("#counterLives").flipCounter("setNumber", myGame.lives);
+    $("#counterLevels").flipCounter({
+        imagePath:"images/flipCounter-medium.png"
+    });
     $("#counterLevels").flipCounter("setNumber", myGame.levels.length - myGame.currentLevel);
 
     var currentTime = new Date();
@@ -156,8 +166,8 @@ function createPersonAt(x, y) {
     boxSd.density = 0.1;
     boxSd.friction = 0;
     boxSd.restitution = 0;
-    boxSd.extents.Set(20, 40);
-
+    boxSd.extents.Set(33, 42);
+    boxSd.userData = document.getElementById('person');
     var boxBd = new b2BodyDef();
     boxBd.AddShape(boxSd);
     boxBd.position.Set(x, y);
@@ -201,9 +211,27 @@ function createGround(width, height, positionX, positionY, rotation, friction) {
 function drawWorld(world, context) {
     for (var b = world.m_bodyList; b != null; b = b.m_next) {
         for (var s = b.GetShapeList(); s != null; s = s.GetNext()) {
-            drawShape(s, context);
+            if (s.GetUserData() != undefined) {
+                // the user data contains the reference to the image
+                var img = s.GetUserData();
+                // the x and y of the image.
+                // We have to substract the half width/height
+                var x = s.GetPosition().x;
+                var y = s.GetPosition().y;
+                var topleftX = - $(img).width()/2;
+                var topleftY = - $(img).height()/2;
+                context.save();
+                context.translate(x,y);
+                context.rotate(s.GetBody().GetRotation());
+                context.drawImage(img, topleftX, topleftY);
+                context.restore();
+            }
+            else {
+                drawShape(s, context);
+            }
         }
     }
+
 }
 
 // drawShape function directly copy from draw_world.js in Box2dJS library
@@ -347,7 +375,8 @@ function isOnAir() {
     var x = Math.abs(myGame.person.GetLinearVelocity().x);
     var y = myGame.person.GetLinearVelocity().y;
     var list = myGame.world.GetContactList();
-
+    console.log("X: " + x + " Y: " + y);
+    return (y != 0);
     if (list == null) {
         //console.log("on air");
         return true;
@@ -355,7 +384,7 @@ function isOnAir() {
         //console.log("      touching ground");
         return false;
     }
-    console.log("X: " + x + " Y: " + y);
+
     //return !(x == 0 && y == 0 || (x == MyGame.STEP_DISTANCE / 100));
     if (myGame.person.currentStepDistance === undefined) {
         myGame.person.currentStepDistance = myGame.STEP_DISTANCE;
