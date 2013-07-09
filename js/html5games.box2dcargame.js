@@ -1,7 +1,7 @@
 var myGame = {
     STEP_DISTANCE: 18000,
-    STEP_DISTANCE_ON_AIR: 25000,
-    JUMP_ALTITUDE: 150000,
+    STEP_DISTANCE_ON_AIR: 35000,
+    JUMP_ALTITUDE: 200000,
     LIVES: 3,
     MOVE_POINTS: 10,
     TIME_FRAME: 5,
@@ -45,7 +45,7 @@ myGame.levels[1] = [
     { "type": "platform", "width": 80, "height": 10, "x": 100, "y": 250, "rotation": 0, "friction": 0},
     { "type": "platform", "width": 80, "height": 10, "x": 350, "y": 300, "rotation": -20, "friction": 0.1 },
     { "type": "platform", "width": 50, "height": 10, "x": 530, "y": 350, "rotation": 0, "friction": 0 },
-    { "type": "platform", "width": 80, "height": 10, "x": 760, "y": 300, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 80, "height": 10, "x": 760, "y": 230, "rotation": 0, "friction": 0 },
     { "type": "platform", "width": 80, "height": 10, "x": 720, "y": 410, "rotation": 0, "friction": 0 },
     { "type": "platform", "width": 99, "height": 10, "x": 980, "y": 500, "rotation": 0, "friction": 0 },
     { "type": "platform", "width": 100, "height": 10, "x": 600, "y": 520, "rotation": 0, "friction": 0 },
@@ -376,7 +376,7 @@ function isOnAir() {
     var y = myGame.person.GetLinearVelocity().y;
     var list = myGame.world.GetContactList();
     console.log("X: " + x + " Y: " + y);
-    return (y != 0);
+    //return (y != 0);
     if (list == null) {
         //console.log("on air");
         return true;
