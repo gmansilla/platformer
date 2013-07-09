@@ -156,6 +156,8 @@ function restartGame(level) {
         }
     }
     $("#counterLevels").flipCounter("setNumber", myGame.levels.length - myGame.currentLevel);
+    $("#audio-background")[0].play();
+
 
 
 }
@@ -314,9 +316,12 @@ function step() {
             myGame.world.DestroyBody(myGame.person);
 
             if (myGame.lives == 0) {
+                $("#audio-background")[0].pause();
+                $("#audio-game-over")[0].play();
                 alert("Game Over");
                 gameOver();
             } else {
+                $("#audio-lose")[0].play();
                 myGame.lives--;
                 alert("you failed! lets try again");
                 $("#counterLives").flipCounter("setNumber", myGame.lives);
@@ -328,10 +333,15 @@ function step() {
                 var totalLevels = myGame.levels.length;
                 myGame.currentLevel++;
                 if (myGame.currentLevel == totalLevels) {
+                    $("#audio-background")[0].pause();
+                    $("#audio-win")[0].play();
                     alert("You have won the game");
                     gameOver();
                     restartGame(0);
                 } else if (myGame.currentLevel < totalLevels) {
+                    $("#audio-background")[0].pause();
+                    $("#audio-pass-level")[0].play();
+                    alert("You have passed to the next level");
                     restartGame(myGame.currentLevel);
                 }
         }
@@ -347,6 +357,8 @@ function gameOver() {
     $("#counterScore").flipCounter("setNumber", myGame.score);
     $("#counterLives").flipCounter("setNumber", myGame.lives);
     $("#counterLevels").flipCounter("setNumber", myGame.levels.length - myGame.currentLevel);
+    $("#audio-background")[0].currentTime = 0;
+
     restartGame(0);
 }
 
