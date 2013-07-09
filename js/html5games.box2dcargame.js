@@ -6,7 +6,7 @@ var myGame = {
     MOVE_POINTS: 10,
     TIME_FRAME: 5,
     TIME_COST: 25,
-    INITIAL_SCORE: 99999,
+    INITIAL_SCORE: 60,
     score: 0,
     currentLevel: 0,
     lives: 3,
@@ -299,12 +299,17 @@ function step() {
             myGame.score -= myGame.TIME_COST;
 
         }
+        $("#counterScore").flipCounter("setNumber", myGame.score);
         if (myGame.score < 1) {
-            alert("Game Over. Either you made too much moves or you ran out of time");
             $("#counterScore").flipCounter("setNumber", 0);
+            $("#audio-background")[0].pause();
+            $("#audio-game-over")[0].play();
+
+            alert("Game Over. Either you made too much moves or you ran out of time");
+
             gameOver();
         }
-        $("#counterScore").flipCounter("setNumber", myGame.score);
+
     }
 
 
