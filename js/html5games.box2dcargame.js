@@ -141,7 +141,7 @@ $(function() {
 function restartGame(level) {
     myGame.currentLevel = level;
     myGame.world = createWorld();
-    myGame.lava = createGround(800, 25, 550, 670, 0);//base - lava
+    myGame.lava = createGround(1500, 25, 0, 670, 0, 0);//base - lava
 
 
     for (var i = 0; i < myGame.levels[level].length; i++) {
