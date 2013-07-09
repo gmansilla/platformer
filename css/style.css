@@ -50,10 +50,10 @@ em {
     width: 1300px;
 }
 
-#level {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+#lava {
+    background-color: rgb(195, 0, 43);
+    min-height: 50px;
+    margin-top: -60px;
 }
 
 .progressbar {

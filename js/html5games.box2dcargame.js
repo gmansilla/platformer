@@ -201,6 +201,7 @@ function createGround(width, height, positionX, positionY, rotation, friction) {
     // body definition with the given shape we just created.
     var groundBd = new b2BodyDef();
     groundBd.AddShape(groundSd);
+
     groundBd.position.Set(positionX, positionY);
     groundBd.rotation = rotation * Math.PI / 180;
     var body = myGame.world.CreateBody(groundBd);
@@ -375,7 +376,7 @@ function isOnAir() {
     var x = Math.abs(myGame.person.GetLinearVelocity().x);
     var y = myGame.person.GetLinearVelocity().y;
     var list = myGame.world.GetContactList();
-    console.log("X: " + x + " Y: " + y);
+    //console.log("X: " + x + " Y: " + y);
     //return (y != 0);
     if (list == null) {
         //console.log("on air");
