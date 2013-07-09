@@ -141,7 +141,7 @@ $(function() {
 function restartGame(level) {
     myGame.currentLevel = level;
     myGame.world = createWorld();
-    myGame.lava = createGround(1500, 25, 0, 670, 0, 0);//base - lava
+    myGame.lava = createGround(1500, 25, 0, canvasHeight + 200, 0, 0);//base - lava
 
 
     for (var i = 0; i < myGame.levels[level].length; i++) {
@@ -152,7 +152,7 @@ function restartGame(level) {
         } else if (obj.type == "person") {
             myGame.person = createPersonAt(obj.x, obj.y);
         } else if (obj.type == "win") {
-            myGame.win = createGround(obj.width, obj.height, obj.x, obj.y, obj.rotation, obj.friction);
+            myGame.win = createGround(obj.width, obj.height, obj.x, obj.y, obj.rotation, obj.friction, true);
         }
     }
     $("#counterLevels").flipCounter("setNumber", myGame.levels.length - myGame.currentLevel);
@@ -191,12 +191,15 @@ function createWorld() {
     return world;
 }
 
-function createGround(width, height, positionX, positionY, rotation, friction) {
+function createGround(width, height, positionX, positionY, rotation, friction, image) {
     // box shape definition
     var groundSd = new b2BoxDef();
     groundSd.extents.Set(width, height);
     groundSd.restitution = 0;
     groundSd.friction = friction;
+    if (image === true) {
+        groundSd.userData = document.getElementById('win');
+    }
 
     // body definition with the given shape we just created.
     var groundBd = new b2BodyDef();
