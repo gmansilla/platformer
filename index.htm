@@ -2,44 +2,90 @@
 <html lang=en>
 <head>
     <meta charset=utf-8>
-	<title>Box2D Car Game</title>	
+	<title>Save Kenny</title>
 	<link href='http://fonts.googleapis.com/css?family=Play&v1' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/bootstrap.min.css" />
 
 </head>
 <body>
-	<header>
-		<h1>Save Kenny</h1>
-	</header>
-	<section id="game-container">
-		<canvas id="game" width='1300' height='700' class="startscreen"></canvas>
-		<div id="fuel" class="progressbar">
+    <div id="wrap" style="display: none">
+        <header>
+            <h1>Save Kenny</h1>
+        </header>
+        <section id="game-container">
+            <canvas id="game" width='1300' height='700' class="startscreen"></canvas>
+            <div id="fuel" class="progressbar">
 
-            <div id="score-board">
-                <table class="table center-table">
-                    <tr class="warning">
-                        <td><span class="spanCounter">Time elapsed</span></td>
-                        <td id="counterTime" class="counter"><input type="hidden" name="counter-value" value="0" /></td>
-                    </tr>
-                    <tr class="success">
-                        <td><span class="spanCounter">Score</span></td>
-                        <td id="counterScore" class="counter"><input type="hidden" name="counter-value" value="0" /></td>
-                    </tr>
-                    <tr class="warning">
-                        <td><span class="spanCounter">Lives</span></td>
-                        <td id="counterLives" class="counter"><input type="hidden" name="counter-value" value="0" /></td>
-                    </tr>
-                    <tr class="success">
-                        <td><span class="spanCounter">Levels to go</span></td>
-                        <td id="counterLevels" class="counter"><input type="hidden" name="counter-value" value="0" /></td>
-                    </tr>
-                </table>
+                <div id="score-board">
+                    <table class="table center-table">
+                        <tr class="warning">
+                            <td><span class="spanCounter">Time elapsed</span></td>
+                            <td id="counterTime" class="counter"><input type="hidden" name="counter-value" value="0" /></td>
+                        </tr>
+                        <tr class="success">
+                            <td><span class="spanCounter">Score</span></td>
+                            <td id="counterScore" class="counter"><input type="hidden" name="counter-value" value="0" /></td>
+                        </tr>
+                        <tr class="warning">
+                            <td><span class="spanCounter">Lives</span></td>
+                            <td id="counterLives" class="counter"><input type="hidden" name="counter-value" value="0" /></td>
+                        </tr>
+                        <tr class="success">
+                            <td><span class="spanCounter">Levels to go</span></td>
+                            <td id="counterLevels" class="counter"><input type="hidden" name="counter-value" value="0" /></td>
+                        </tr>
+                    </table>
 
+                </div>
             </div>
-		</div>
 
-	</section>
+        </section>
+    </div>
+    <div id="welcome">
+        <div class="container text-center">
+            <div class="page-header">
+                <h1>Welcome to Save Kenny Game</h1>
+            </div>
+            <p class="lead ">
+                Instructions: You need to get to where Kenny is.
+            </p>
+            <p class="lead ">
+                Every move you make will make your score to decrease, <br> so you need to hurry before your score reaches 0
+            </p>
+
+            <p class="lead ">
+                Controls: <br>
+                "A" to move left  <br>
+                "D" to move right  <br>
+                "W" to jump.  <br>
+                You can press W and before going down press A or D
+            </p>
+
+            <p class="lead ">
+                This game contains coarse language that could make it inappropriate for younger audiences
+            </p>
+            <br><br><br>
+
+            <p  class="lead text-center">
+                <i class="icon-user"></i> Guillermo Mansilla - Student ID 300714073
+                <br>
+                <i class="icon-user"></i> Images and sounds are property of South Park Studios
+                <br>
+                <i class="icon-user"></i> This game uses 3rd party libraries like: Jquery, Box2D, Jquery-UI, Bootstrap and Jquery-FlipCounter
+                <br>
+                
+                <i class="icon-book"></i> Source code is available <a href="https://github.com/gmansilla/whack-a-mole/commits/master">here</a>
+            </p>
+            <p>
+                <button id ="showBoard" class="btn btn-success" data-dismiss="modal" aria-hidden="true">Lets save Kenny!</button>
+            </p>
+        </div>
+        <div id="push2">
+
+        </div>
+    </div>
+
     <!--<div id="lava"></div>-->
 	<div id="asset">
 		<img id="person" src='images/cartman.png'>
@@ -70,7 +116,10 @@
 
 	<!--[if IE]><script type="text/javascript" src="js/excanvas.js"></script><![endif]-->
 	<script src="js/protoclass.js"></script>
-	<script src="js/jquery-1.6.min.js"></script>
+	<script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery-ui.js"></script>
+
 	<!-- box2djs -->
 <script src='js/box2d/common/b2Settings.js'></script>
 <script src='js/box2d/common/math/b2Vec2.js'></script>

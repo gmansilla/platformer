@@ -6,7 +6,7 @@ var myGame = {
     MOVE_POINTS: 10,
     TIME_FRAME: 5,
     TIME_COST: 25,
-    INITIAL_SCORE: 60,
+    INITIAL_SCORE: 600,
     score: 0,
     currentLevel: 0,
     lives: 3,
@@ -65,6 +65,51 @@ myGame.levels[2] = [
 
 
 $(function() {
+    $("#showBoard").click(function() {
+        $("#welcome").hide("slide", { direction: "down" }, 100);
+        $("#wrap").show();
+        // get the reference of the context
+        canvas = document.getElementById('game');
+        ctx = canvas.getContext('2d');
+        canvasWidth = parseInt(canvas.width);
+        canvasHeight = parseInt(canvas.height);
+
+
+
+        restartGame(myGame.currentLevel);
+        drawWorld(myGame.world, ctx);
+        // start advancing the step
+
+        $(".counter").flipCounter({
+            number:0, // the initial number the counter should display, overrides the hidden field
+            numIntegralDigits:3, // number of places left of the decimal point to maintain
+            digitHeight:40, // the height of each digit in the flipCounter-medium.png sprite image
+            digitWidth:30, // the width of each digit in the flipCounter-medium.png sprite image
+            imagePath:"images/flipCounter-medium.png", // the path to the sprite image relative to your html document
+            easing: false, // the easing function to apply to animations, you can override this with a jQuery.easing method
+            duration:1000 // duration of animations
+        });
+        myGame.score = myGame.INITIAL_SCORE;
+        $("#counterTime").flipCounter("setNumber", 0);
+        $("#counterScore").flipCounter({
+            imagePath:"images/flipCounter-medium.png",
+            numIntegralDigits:3
+        });
+        $("#counterScore").flipCounter("setNumber", myGame.score);
+
+        $("#counterLives").flipCounter({
+            imagePath:"images/flipCounter-medium.png"
+        });
+        $("#counterLives").flipCounter("setNumber", myGame.lives);
+        $("#counterLevels").flipCounter({
+            imagePath:"images/flipCounter-medium.png"
+        });
+        $("#counterLevels").flipCounter("setNumber", myGame.levels.length - myGame.currentLevel);
+
+        var currentTime = new Date();
+        myGame.lastUpdate = myGame.startTime = currentTime.getTime();
+        step();
+    });
     $(document).keydown(function(e) {
         var isFlying = isOnAir();
         switch(e.keyCode) {
@@ -95,47 +140,7 @@ $(function() {
         myGame.person.SetAngularVelocity(0);
     });
 
-    // get the reference of the context
-    canvas = document.getElementById('game');
-    ctx = canvas.getContext('2d');
-    canvasWidth = parseInt(canvas.width);
-    canvasHeight = parseInt(canvas.height);
 
-
-
-    restartGame(myGame.currentLevel);
-    drawWorld(myGame.world, ctx);
-    // start advancing the step
-
-    $(".counter").flipCounter({
-        number:0, // the initial number the counter should display, overrides the hidden field
-        numIntegralDigits:3, // number of places left of the decimal point to maintain
-        digitHeight:40, // the height of each digit in the flipCounter-medium.png sprite image
-        digitWidth:30, // the width of each digit in the flipCounter-medium.png sprite image
-        imagePath:"images/flipCounter-medium.png", // the path to the sprite image relative to your html document
-        easing: false, // the easing function to apply to animations, you can override this with a jQuery.easing method
-        duration:1000 // duration of animations
-    });
-    myGame.score = myGame.INITIAL_SCORE;
-    $("#counterTime").flipCounter("setNumber", 0);
-    $("#counterScore").flipCounter({
-        imagePath:"images/flipCounter-medium.png",
-        numIntegralDigits:3
-    });
-    $("#counterScore").flipCounter("setNumber", myGame.score);
-
-    $("#counterLives").flipCounter({
-        imagePath:"images/flipCounter-medium.png"
-    });
-    $("#counterLives").flipCounter("setNumber", myGame.lives);
-    $("#counterLevels").flipCounter({
-        imagePath:"images/flipCounter-medium.png"
-    });
-    $("#counterLevels").flipCounter("setNumber", myGame.levels.length - myGame.currentLevel);
-
-    var currentTime = new Date();
-    myGame.lastUpdate = myGame.startTime = currentTime.getTime();
-    step();
 });
 
 function restartGame(level) {
