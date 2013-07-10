@@ -1,3 +1,9 @@
+/*
+JS FILE. Platformer Game
+by Guillermo Mansilla.
+This code is part of an assignment for Web Game Programming.
+I am using 3rd party libraries like: Jquery, Box2D, Jquery-UI, Bootstrap and Jquery-FlipCounter
+ */
 var myGame = {
 	STEP_DISTANCE: 58000,
 	STEP_DISTANCE_ON_AIR: 35000,
@@ -75,15 +81,8 @@ $(function () {
 		ctx = canvas.getContext('2d');
 		canvasWidth = parseInt(canvas.width);
 		canvasHeight = parseInt(canvas.height);
-
-		$("#counterTime").flipCounter({
-			number: 0, // the initial number the counter should display, overrides the hidden field
-			numIntegralDigits: 3, // number of places left of the decimal point to maintain
-			digitHeight: 40, // the height of each digit in the flipCounter-medium.png sprite image
-			digitWidth: 30, // the width of each digit in the flipCounter-medium.png sprite image
-			imagePath: "images/flipCounter-medium.png", // the path to the sprite image relative to your html document
-			easing: false, // the easing function to apply to animations, you can override this with a jQuery.easing method
-			duration: 1000 // duration of animations
+        $("#counterTime").flipCounter({
+			imagePath: "images/flipCounter-medium.png"
 		});
 		myGame.score = myGame.INITIAL_SCORE;
 		$("#counterTime").flipCounter("setNumber", 0);
@@ -104,9 +103,6 @@ $(function () {
 
 		restartGame(myGame.currentLevel);
 		drawWorld(myGame.world, ctx);
-		// start advancing the step
-
-
 		var currentTime = new Date();
 		myGame.lastUpdate = myGame.startTime = currentTime.getTime();
 		$(document).keydown(function (e) {
@@ -144,16 +140,18 @@ $(function () {
 
 });
 
+/**
+ * initializes the given level
+ * @param level
+ * @return void
+ */
 function restartGame(level) {
 	myGame.currentLevel = level;
 	myGame.world = createWorld();
-	myGame.lava = createGround(1500, 25, 0, canvasHeight + 200, 0, 0);//base - lava
-
-
-	for (var i = 0; i < myGame.levels[level].length; i++) {
+	myGame.lava = createGround(1500, 25, 0, canvasHeight + 200, 0, 0); //base - lava, if avatar touches this, then it dies
+    for (var i = 0; i < myGame.levels[level].length; i++) {
 		var obj = myGame.levels[level][i];
-
-		if (obj.type == "platform") {
+        if (obj.type == "platform") {
 			createGround(obj.width, obj.height, obj.x, obj.y, obj.rotation, obj.friction);
 		} else if (obj.type == "person") {
 			myGame.person = createPersonAt(obj.x, obj.y);
@@ -163,10 +161,14 @@ function restartGame(level) {
 	}
 	$("#counterLevels").flipCounter("setNumber", myGame.levels.length - myGame.currentLevel);
 	$("#audio-background")[0].play();
-
-
 }
 
+/**
+ * Creates the avatar at a given position
+ * @param x desired position in X coordinates
+ * @param y desired position in Y coordinates
+ * @returns {*}
+ */
 function createPersonAt(x, y) {
 	// create a box
 	var boxSd = new b2BoxDef();
@@ -183,6 +185,10 @@ function createPersonAt(x, y) {
 	return myGame.world.CreateBody(boxBd);
 }
 
+/**
+ * Creates the world
+ * @returns {b2World}
+ */
 function createWorld() {
 	// set the size of the world
 	var worldAABB = new b2AABB();
@@ -198,6 +204,17 @@ function createWorld() {
 	return world;
 }
 
+/**
+ * Creates a platform
+ * @param int width desired width
+ * @param int height desired height
+ * @param int positionX desired position in X coordinates
+ * @param int positionY desired position in Y coordinates
+ * @param int rotation rotation to be used
+ * @param int friction friction to be used in the fixture
+ * @param boolean image
+ * @returns {*}
+ */
 function createGround(width, height, positionX, positionY, rotation, friction, image) {
 	// box shape definition
 	var groundSd = new b2BoxDef();
@@ -218,7 +235,11 @@ function createGround(width, height, positionX, positionY, rotation, friction, i
 	return body;
 }
 
-// drawing functions
+/**
+ * Draws the world
+ * @param world
+ * @param context
+ */
 function drawWorld(world, context) {
 	for (var b = world.m_bodyList; b != null; b = b.m_next) {
 		for (var s = b.GetShapeList(); s != null; s = s.GetNext()) {
@@ -289,6 +310,11 @@ function drawShape(shape, context) {
 	context.stroke();
 }
 
+/**
+ * Step function, most of the logic is handled here.
+ * We constantly check the collisions events and check if game is over or
+ * if user passes to the next level
+ */
 function step() {
 	myGame.world.Step(1.0 / 60, 1);
 	ctx.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -309,23 +335,16 @@ function step() {
 			$("#counterScore").flipCounter("setNumber", 0);
 			$("#audio-background")[0].pause();
 			$("#audio-game-over")[0].play();
-
-			alert("Game Over. Either you made too much moves or you ran out of time");
-
-			gameOver();
+            alert("Game Over. Either you made too much moves or you ran out of time");
+            gameOver();
 		}
-
-	}
-
-
-	for (var cn = myGame.world.GetContactList(); cn != null; cn = cn.GetNext()) {
+    }
+    for (var cn = myGame.world.GetContactList(); cn != null; cn = cn.GetNext()) {
 		var body1 = cn.GetShape1().GetBody();
 		var body2 = cn.GetShape2().GetBody();
-
-		if (body1 == myGame.lava || body2 == myGame.lava) { //character is on lava,
+    	if (body1 == myGame.lava || body2 == myGame.lava) { //character is on lava,
 			myGame.world.DestroyBody(myGame.person);
-
-			if (myGame.lives == 0) {
+    		if (myGame.lives == 0) {
 				$("#audio-background")[0].pause();
 				$("#audio-game-over")[0].play();
 				alert("Game Over");
@@ -358,7 +377,9 @@ function step() {
 	}
 }
 
-
+/**
+ * Resets the game to the initial state
+ */
 function gameOver() {
 	myGame.currentLevel = myGame.lastUpdate = myGame.elapsedTime = 0;
 	myGame.score = myGame.INITIAL_SCORE;
@@ -372,6 +393,11 @@ function gameOver() {
 	restartGame(0);
 }
 
+/**
+ * Moves the avatar to the given direction
+ * @param int direction where the avatar should go
+ * @param isFlying boolean indicating if avatar is not touching a platform (is flying)
+ */
 function movePerson(direction, isFlying) {
 	myGame.person.currentStepDistance = (isFlying ? myGame.STEP_DISTANCE_ON_AIR : myGame.STEP_DISTANCE);
 	if (isFlying && (myGame.person.lastPressedKey == direction)) {
@@ -388,6 +414,10 @@ function movePerson(direction, isFlying) {
 	myGame.person.lastPressedKey = direction;
 }
 
+/**
+ * Determines if the avatar is touching a platform
+ * @returns {boolean}
+ */
 function isOnAir() {
 	var x = Math.abs(myGame.person.GetLinearVelocity().x);
 	var y = myGame.person.GetLinearVelocity().y;
@@ -395,6 +425,10 @@ function isOnAir() {
 	return (list == null);
 }
 
+/**
+ * Forces the avatar to go down
+ * @param magnitude
+ */
 function goDown(magnitude) {
 	var impulse = new b2Vec2(0, magnitude);
 	myGame.person.ApplyImpulse(impulse, myGame.person.GetCenterPosition());
