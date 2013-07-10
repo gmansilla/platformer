@@ -108,37 +108,38 @@ $(function() {
 
         var currentTime = new Date();
         myGame.lastUpdate = myGame.startTime = currentTime.getTime();
+        $(document).keydown(function(e) {
+            var isFlying = isOnAir();
+            switch(e.keyCode) {
+                case LEFT: // left - a
+                    movePerson(LEFT, isFlying);
+                    break;
+
+                case RIGHT: // right - d
+                    movePerson(RIGHT, isFlying);
+                    break;
+
+                case JUMP: //up - w
+
+                    if (!isFlying) {
+                        goDown(myGame.JUMP_ALTITUDE * -1); //negative, so we JUMP
+                    } else {
+                        goDown(100000);
+                    }
+                    myGame.person.lastPressedKey = JUMP;
+                    break;
+            }
+
+        });
+
+        $(document).keyup(function(e) {
+            myGame.person.lastReleasedKey = e.keyCode;
+            myGame.person.SetLinearVelocity(new b2Vec2(0, 500));
+            myGame.person.SetAngularVelocity(0);
+        });
         step();
     });
-    $(document).keydown(function(e) {
-        var isFlying = isOnAir();
-        switch(e.keyCode) {
-            case LEFT: // left - a
-                movePerson(LEFT, isFlying);
-                break;
 
-            case RIGHT: // right - d
-                movePerson(RIGHT, isFlying);
-                break;
-
-            case JUMP: //up - w
-
-                if (!isFlying) {
-                    goDown(myGame.JUMP_ALTITUDE * -1); //negative, so we JUMP
-                } else {
-                    goDown(100000);
-                }
-                myGame.person.lastPressedKey = JUMP;
-                break;
-        }
-
-    });
-
-    $(document).keyup(function(e) {
-        myGame.person.lastReleasedKey = e.keyCode;
-        myGame.person.SetLinearVelocity(new b2Vec2(0, 500));
-        myGame.person.SetAngularVelocity(0);
-    });
 
 
 });
