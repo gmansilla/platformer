@@ -27,7 +27,7 @@ JUMP = 87;
 
 myGame.levels[0] = [
     { "type": "person", "x": 750, "y": 500 },
-    { "type": "win", "width": 20, "height": 30, "x": 100, "y": 200, "rotation": 0, "friction": 0},
+    { "type": "win", "width": 40, "height": 30, "x": 100, "y": 200, "rotation": 0, "friction": 0},
     { "type": "platform", "width": 100, "height": 10, "x": 100, "y": 250, "rotation": 0, "friction": 0},
     { "type": "platform", "width": 80, "height": 10, "x": 400, "y": 120, "rotation": 0, "friction": 0 },
     { "type": "platform", "width": 100, "height": 10, "x": 500, "y": 220, "rotation": 0, "friction": 0 },
