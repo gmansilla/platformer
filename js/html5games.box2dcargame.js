@@ -39,16 +39,19 @@ myGame.levels[0] = [
 ];
 
 myGame.levels[1] = [
-    { "type": "person", "x": 750, "y": 500 },
-    { "type": "win", "width": 20, "height": 30, "x": 100, "y": 200, "rotation": 0, "friction": 0},
+    { "type": "person", "x": 780, "y": 500 },
+    { "type": "win", "width": 40, "height": 30, "x": 100, "y": 200, "rotation": 0, "friction": 0},
     { "type": "platform", "width": 80, "height": 10, "x": 100, "y": 250, "rotation": 0, "friction": 0},
     { "type": "platform", "width": 80, "height": 10, "x": 350, "y": 300, "rotation": -20, "friction": 0.1 },
-    { "type": "platform", "width": 50, "height": 10, "x": 510, "y": 350, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 50, "height": 10, "x": 550, "y": 350, "rotation": 0, "friction": 0 },
     { "type": "platform", "width": 80, "height": 10, "x": 760, "y": 230, "rotation": 0, "friction": 0 },
-    { "type": "platform", "width": 80, "height": 10, "x": 720, "y": 410, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 80, "height": 10, "x": 720, "y": 410, "rotation": 10, "friction": 0 },
     { "type": "platform", "width": 99, "height": 10, "x": 980, "y": 500, "rotation": 0, "friction": 0 },
-    { "type": "platform", "width": 100, "height": 10, "x": 600, "y": 520, "rotation": 0, "friction": 0 },
-    { "type": "platform", "width": 90, "height": 10, "x": 750, "y": 600, "rotation": -10, "friction": 0 }
+    { "type": "platform", "width": 30, "height": 10, "x": 300, "y": 450, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 30, "height": 10, "x": 400, "y": 500, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 30, "height": 10, "x": 520, "y": 550, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 30, "height": 10, "x": 620, "y": 590, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 40, "height": 10, "x": 800, "y": 600, "rotation": 0, "friction": 0 }
 ];
 myGame.levels[2] = [
     { "type": "person", "x": 420, "y": 50 },
@@ -403,7 +406,8 @@ function isOnAir() {
     var list = myGame.world.GetContactList();
     if (list == null) {
         return true;
-    } else if (y != 0) {
+    } else {
+        console.log("X: " + x + " Y: " + y);
         return false;
     }
 
