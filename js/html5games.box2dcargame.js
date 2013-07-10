@@ -6,7 +6,7 @@ var myGame = {
     MOVE_POINTS: 10,
     TIME_FRAME: 5,
     TIME_COST: 25,
-    INITIAL_SCORE: 999,
+    INITIAL_SCORE: 9999,
     score: 0,
     currentLevel: 0,
     lives: 3,
@@ -43,7 +43,7 @@ myGame.levels[1] = [
     { "type": "win", "width": 20, "height": 30, "x": 100, "y": 200, "rotation": 0, "friction": 0},
     { "type": "platform", "width": 80, "height": 10, "x": 100, "y": 250, "rotation": 0, "friction": 0},
     { "type": "platform", "width": 80, "height": 10, "x": 350, "y": 300, "rotation": -20, "friction": 0.1 },
-    { "type": "platform", "width": 50, "height": 10, "x": 530, "y": 350, "rotation": 0, "friction": 0 },
+    { "type": "platform", "width": 50, "height": 10, "x": 510, "y": 350, "rotation": 0, "friction": 0 },
     { "type": "platform", "width": 80, "height": 10, "x": 760, "y": 230, "rotation": 0, "friction": 0 },
     { "type": "platform", "width": 80, "height": 10, "x": 720, "y": 410, "rotation": 0, "friction": 0 },
     { "type": "platform", "width": 99, "height": 10, "x": 980, "y": 500, "rotation": 0, "friction": 0 },
@@ -401,13 +401,9 @@ function isOnAir() {
     var x = Math.abs(myGame.person.GetLinearVelocity().x);
     var y = myGame.person.GetLinearVelocity().y;
     var list = myGame.world.GetContactList();
-    //console.log("X: " + x + " Y: " + y);
-    //return (y != 0);
     if (list == null) {
-        //console.log("on air");
         return true;
-    } else {
-        //console.log("      touching ground");
+    } else if (y != 0) {
         return false;
     }
 
