@@ -389,8 +389,7 @@ function gameOver() {
 	$("#counterLives").flipCounter("setNumber", myGame.lives);
 	$("#counterLevels").flipCounter("setNumber", myGame.levels.length - myGame.currentLevel);
 	$("#audio-background")[0].currentTime = 0;
-
-	restartGame(0);
+    restartGame(0);
 }
 
 /**
