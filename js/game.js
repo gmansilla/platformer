@@ -12,7 +12,7 @@ var myGame = {
 	MOVE_POINTS: 10,
 	TIME_FRAME: 5,
 	TIME_COST: 25,
-	INITIAL_SCORE: 9999,
+	INITIAL_SCORE: 999,
 	score: 0,
 	currentLevel: 0,
 	lives: 3,
