@@ -74,13 +74,7 @@ $(function() {
         canvasWidth = parseInt(canvas.width);
         canvasHeight = parseInt(canvas.height);
 
-
-
-        restartGame(myGame.currentLevel);
-        drawWorld(myGame.world, ctx);
-        // start advancing the step
-
-        $(".counter").flipCounter({
+        $("#counterTime").flipCounter({
             number:0, // the initial number the counter should display, overrides the hidden field
             numIntegralDigits:3, // number of places left of the decimal point to maintain
             digitHeight:40, // the height of each digit in the flipCounter-medium.png sprite image
@@ -105,6 +99,12 @@ $(function() {
             imagePath:"images/flipCounter-medium.png"
         });
         $("#counterLevels").flipCounter("setNumber", myGame.levels.length - myGame.currentLevel);
+
+        restartGame(myGame.currentLevel);
+        drawWorld(myGame.world, ctx);
+        // start advancing the step
+
+
 
         var currentTime = new Date();
         myGame.lastUpdate = myGame.startTime = currentTime.getTime();
